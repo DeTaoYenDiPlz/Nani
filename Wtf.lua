@@ -65,13 +65,13 @@ local lp = plrs.LocalPlayer
 local Workspace = game:GetService("Workspace")
 NpcList = {}
 for i, v in pairs(Workspace.NPCs:GetChildren()) do
-    if string.find(string.lower(v.Name), "Home Point") then
+    if string.find(string.lower(v.Name), "home point") then
         table.insert(NpcList, v:GetModelCFrame())
     end
 end
 
 for i, v in pairs(getnilinstances()) do
-    if string.find(string.lower(v.Name), "Home Point") then
+    if string.find(string.lower(v.Name), "home point") then
         table.insert(NpcList, v:GetModelCFrame())
     end
 end
