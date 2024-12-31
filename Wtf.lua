@@ -40,8 +40,6 @@ end
 --= [ Fix Lag & Destroy Sea ] =--
 
 require(game.ReplicatedStorage.Util.CameraShaker):Stop()
-
-game:GetService("ReplicatedStorage").Util.Sound.Storage.Swing:Destroy()
 pcall(function()
     for _, v in pairs(game:GetDescendants()) do
         if v:IsA("Texture") then
