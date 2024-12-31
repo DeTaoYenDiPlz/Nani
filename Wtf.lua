@@ -56,6 +56,8 @@ pcall(function()
             v:Destroy()
         end
     end
+    game:GetService("ReplicatedStorage").Assets:FindFirstChild("SlashHit"):Destroy()
+    game:GetService("ReplicatedStorage").Util.Sound.Storage.Swing:Destroy()
 end)
 
 --= [ Noclip & Move Fly & Pos ] =--
