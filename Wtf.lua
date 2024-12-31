@@ -316,20 +316,21 @@ Window:EditOpenButton({
 
 Window:Tab({
     Title = "Tab Setting",
-    Icon = "settings",
+    Icon = "settings"
 })
 
 Window:SelectTab(1)
 
 Window:Tab({
     Title = "Tab Farming",
-    Icon = "pickaxe",
+    Icon = "pickaxe"
 })
 
 --= [ Tab Setting ] =--
 
 Setting:Section({ 
     Title = "~ Setting Farming ~",
+    TextSize = 15,
     TextXAlignment = "Center"
 })
 
