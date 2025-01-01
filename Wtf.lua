@@ -289,60 +289,39 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/re
 
 --= [ Ui & Tab ] =--
 
-local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
-
-local Window = WindUI:CreateWindow({
-    Title = "Z - Manazure Hub",
-    Icon = "flame",
-    Author = "ObieVN - discord.gg/TbcwPDnhbK",
-    Folder = "Z - Manazure Hub",
-    Size = UDim2.fromOffset(580, 460),
-    Transparent = true,
-    Theme = "Dark",
-    SideBarWidth = 135,
-    HasOutline = true
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+   Name = "Z - Manazure Hub",
+   Icon = 0,
+   LoadingTitle = "Z - Manazure Hub",
+   LoadingSubtitle = "by ObieVN - discord.gg/TbcwPDnhbK",
+   Theme = "Default",
+   DisableRayfieldPrompts = true,
+   DisableBuildWarnings = true,
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "Z - Manazure Hub",
+      FileName = "Blox-Fruits"
+   },
+   }
 })
 
-Window:EditOpenButton({
-    Title = "Z - Manazure Hub",
-    Icon = "flame",
-    CornerRadius = UDim.new(0,10),
-    StrokeThickness = 1.5,
-    Color = ColorSequence.new(
-        Color3.fromHex("FFFFFF"), 
-        Color3.fromHex("87CEEB")
-    )
-})
-
-Window:Tab({
-    Title = "Tab Setting",
-    Icon = "settings"
-})
-
-Window:SelectTab(1)
-
-Window:Tab({
-    Title = "Tab Farming",
-    Icon = "pickaxe"
-})
+local Setting = Window:CreateTab("Setting", "settings")
+local Farming = Window:CreateTab("Farming", "pickaxe")
 
 --= [ Tab Setting ] =--
 
-Setting:Section({ 
-    Title = "~ Setting Farming ~",
-    TextSize = 15,
-    TextXAlignment = "Center"
-})
+Setting:CreateSection("~ Setting Farming ~")
 
-Setting:Dropdown({
-    Title = "Select Weapon",
-    Multi = false,
-    Value = "Melee",
-    AllowNone = false,
-    Values = {"Melee","Sword","Blox Fruit","Gun"},
-    Callback = function(Cac)
-        _G.SelectWeapon = Cac
-    end
+Setting:CreateDropdown({
+   Name = "Select Weapon",
+   Options = {"Melee","Sword","Blox Fruit","Gun"},
+   CurrentOption = {"Melee"},
+   MultipleOptions = false,
+   Flag = "SelectWeapon",
+   Callback = function(Cac)
+       _G.SelectWeapon = Cac
+   end
 })
 
 function EquipWeapon(Weapon)
@@ -360,12 +339,13 @@ function EquipWeapon(Weapon)
     return a 
 end
 
-Setting:Toggle({
-    Title = "Fast Attack",
-    Value = true,
-    Callback = function(Cac)
-        _G.FastAttack = Cac
-    end
+Setting:CreateToggle({
+   Name = "Fast Attack",
+   CurrentValue = true,
+   Flag = "FastAttack",
+   Callback = function(Cac)
+       _G.FastAttack = Cac
+   end
 })
 
 local targets = {}
@@ -415,12 +395,13 @@ spawn(function()
     end
 end)
 
-Setting:Toggle({
-    Title = "Auto Click",
-    Value = false,
-    Callback = function(Cac)
-        _G.AutoClick = Cac
-    end
+Setting:CreateToggle({
+   Name = "Auto Click",
+   CurrentValue = false,
+   Flag = "AutoClick",
+   Callback = function(Cac)
+       _G.AutoClick = Cac
+   end
 })
 
 function AutoClick()
@@ -434,14 +415,14 @@ spawn(function()
     end
 end)
 
-Setting:Dropdown({
-    Title = "Select Range Bring Mob",
-    Multi = false,
-    Value = "Slightly Far [ 300m ]",
-    AllowNone = false,
-    Values = {"Very Close [ 250m ]","Near The [ 275m ]","Slightly Far [ 300m ]","Distant [ 325m ]","Really Far [ 350m ]"},
-    Callback = function(Cac)
-        _G.RangeBring = Value
+Setting:CreateDropdown({
+   Name = "Select Range Bring Mob",
+   Options = {"Very Close [ 250m ]","Near The [ 275m ]","Slightly Far [ 300m ]","Distant [ 325m ]","Really Far [ 350m ]"},,
+   CurrentOption = {"Slightly Far [ 300m ]"},
+   MultipleOptions = false,
+   Flag = "RangeBring",
+   Callback = function(Cac)
+       _G.RangeBring = Cac
         if _G.RangeBring == "Very Close [ 250m ]" then
             BringRange = 250
         elseif _G.RangeBring == "Near The [ 275m ]" then
@@ -453,15 +434,16 @@ Setting:Dropdown({
         elseif _G.RangeBring == "Really Far [ 350m ]" then
             BringRange = 350
         end
-    end
+   end,
 })
 
-Setting:Toggle({
-    Title = "Bring Mob",
-    Value = true,
-    Callback = function(Cac)
-        _G.BringMob = Cac
-    end
+Setting:CreateToggle({
+   Name = "Bring Mob",
+   CurrentValue = true,
+   Flag = "BringMob",
+   Callback = function(Cac)
+       _G.BringMob = Cac
+   end
 })
 
 spawn(function()
@@ -552,71 +534,68 @@ spawn(function()
     end
 end)
 
-Setting:Section({ 
-    Title = "~ Move ~",
-    TextXAlignment = "Center"
+Setting:CreateSection("~ Move ~")
+
+Setting:CreateSlider({
+   Name = "Fly Speed",
+   Range = {1, 400},
+   Increment = 1,
+   Suffix = "",
+   CurrentValue = 350,
+   Flag = "FlySpeed",
+   Callback = function(Cac)
+       _G.FlySpees = Cac
+   end
 })
 
-Setting:Slider({
-    Title = "Fly Speed",
-    Step = 1,
-    Value = {
-        Min = 1,
-        Max = 400,
-        Default = 350
-    },
-    Callback = function(Cac)
-        _G.FlySpeed = Cac
-    end
+Setting:CreateToggle({
+   Name = "Bypass Teleport",
+   CurrentValue = false,
+   Flag = "BypassTeleport",
+   Callback = function(Cac)
+       _G.BypassTeleport = Cac
+   end
 })
 
-Setting:Toggle({
-    Title = "Bypass Teleport",
-    Value = false,
-    Callback = function(Cac)
-        _G.BypassTeleport = Cac
-    end
+Setting:CreateButton({
+   Name = "Stop Fly",
+   Callback = function()
+       _G.NoClip = false
+   end,
 })
 
-Setting:Button({
-    Title = "Stop Fly",
-    Callback = function()
-        _G.NoClip = false
-    end
-})
+Setting:CreateSection("~ Graphic & Reduce Lag ~")
 
-Setting:Section({ 
-    Title = "~ Graphic & Reduce Lag ~",
-    TextXAlignment = "Center"
-})
-
-Setting:Toggle({
-	Title = "White Screen",
-	Value = false,
-	Callback = function(Cac)
-		_G.WhiteScreen = Cac
+Setting:CreateToggle({
+   Name = "White Screen",
+   CurrentValue = false,
+   Flag = "WhiteScreen",
+   Callback = function(Cac)
+       _G.WhiteScreen = Cac
 		if _G.WhiteScreen == true then
    	     game:GetService("RunService"):Set3dRenderingEnabled(false)
 	    elseif _G.WhiteScreen == false then
  	       game:GetService("RunService"):Set3dRenderingEnabled(true)
 	    end
-	end
+   end
 })
 
-Setting:Toggle({
-	Title = "Disabled Notifications Text",
-	Default = false,
-	Callback = function(Value)
-		_G.DisabledNotifications = Value
-	end
+Setting:CreateToggle({
+   Name = "Disabled Notifications Text",
+   CurrentValue = false,
+   Flag = "DisabledNotifications",
+   Callback = function(Cac)
+       _G.DisabledNotifications = Cac
+   end
 })
 
-Setting:Toggle({
-	Title = "Disabled Damage Counter",
-	Default = true,
-	Callback = function(Value)
-		_G.DisabledDamage = Value
-	end
+Setting:CreateToggle({
+   Name = "Disabled Damage Counter",
+   CurrentValue = true,
+   Flag = "DisabledDamage",
+   Callback = function(Cac)
+       _G.DisabledDamage = Cac
+   end
 })
 
 spawn(function()
@@ -644,11 +623,11 @@ Setting:Button({
     end
 })
 
-Setting:Button({
-    Title = "Remove Lava",
-    Callback = function()
-        RemoveLava()
-    end
+Setting:CreateButton({
+   Name = "Remove Lava",
+   Callback = function()
+       RemoveLava()
+   end
 })
 
 function RemoveLava()
@@ -664,11 +643,11 @@ function RemoveLava()
 	end
 end
 
-Setting:Button({
-    Title = "Fps Booster",
-    Callback = function()
-        FpsBooster()
-    end
+Setting:CreateButton({
+   Name = "Fps Booster",
+   Callback = function()
+       FpsBooster()
+   end
 })
 
 function FpsBooster()
@@ -713,17 +692,15 @@ function FpsBooster()
     end
 end
 
-Setting:Section({ 
-    Title = "~ Other ~",
-    TextXAlignment = "Center"
-})
+Setting:CreateSection("~ Other ~")
 
-Setting:Toggle({
-	Title = "Auto Rejoin When Disconnect",
-	Value = true,
-	Callback = function(Cac)
-		_G.AutoRejoin = Cac
-	end
+Setting:CreateToggle({
+   Name = "Auto Rejoin When Disconnect",
+   CurrentValue = true,
+   Flag = "AutoRejoin",
+   Callback = function(Cac)
+       _G.AutoRejoin = Cac
+   end
 })
 
 function AutoRejoin()
