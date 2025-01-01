@@ -560,7 +560,7 @@ Setting:CreateButton({
    Name = "Stop Fly",
    Callback = function()
        _G.NoClip = false
-   end,
+   end
 })
 
 Setting:CreateSection("~ Graphic & Reduce Lag ~")
@@ -614,8 +614,8 @@ spawn(function()
 	end
 end)
 
-Setting:Button({
-    Title = "Remove Fog",
+Setting:CreateButton({
+    Name = "Remove Fog",
     Callback = function()
         game:GetService("Lighting").LightingLayers:Destroy()
     	game:GetService("Lighting").Sky:Destroy()
