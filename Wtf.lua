@@ -289,7 +289,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/re
 
 --= [ Ui & Tab ] =--
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Window = Rayfield:CreateWindow({
    Name = "Z - Manazure Hub",
    Icon = 0,
@@ -471,7 +471,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if BringNear then
@@ -486,7 +486,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if _G.FarmMaterial and BringMaterial then
@@ -502,7 +502,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if _G.FarmMob and BringMob then
@@ -517,7 +517,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
     end
