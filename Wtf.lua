@@ -302,7 +302,6 @@ local Window = Rayfield:CreateWindow({
       Enabled = true,
       FolderName = "Z - Manazure Hub",
       FileName = "Blox-Fruits"
-   },
    }
 })
 
