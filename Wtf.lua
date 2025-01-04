@@ -224,7 +224,7 @@ spawn(function()
     end
 end)
 
-function StopTween
+function StopTween()
     if not target then
         topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
         _G.NoClip = false
