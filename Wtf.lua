@@ -54,6 +54,11 @@ pcall(function()
             v:Destroy()
         end
     end
+    for i, v in pairs(game:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Trail") then
+            v.Lifetime = NumberRange.new(0)
+        end
+    end
     game:GetService("ReplicatedStorage").Assets:FindFirstChild("SlashHit"):Destroy()
     game:GetService("ReplicatedStorage").Util.Sound.Storage.Swing:Destroy()
 end)
@@ -219,6 +224,13 @@ spawn(function()
     end
 end)
 
+function StopTween
+    if not target then
+        _G.NoClip = false
+        topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+    end
+end
+
 Type = 1
 spawn(function()
     while task.wait() do
@@ -303,7 +315,7 @@ local Window = WindUI:CreateWindow({
 })
 
 Window:EditOpenButton({
-    Title = "Open UI Button",
+    Title = "Open Menu",
     Icon = "tree-palm",
     CornerRadius = UDim.new(0, 10),
     StrokeThickness = 1.5,
@@ -331,7 +343,7 @@ local Farming = Window:Tab({
 --= [ Tab Setting ] =--
 
 Setting:Section({ 
-    Title = "~ Setting Farming ~",
+    Title = "~ Farming ~",
     TextXAlignment = "Center"
 })
 
@@ -360,6 +372,16 @@ function EquipWeapon(Weapon)
         end
     end
     return a 
+end
+
+function UnEquipWeapon(Weapon)
+    if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
+        _G.NotAutoEquip = true
+        wait(0.5)
+        game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
+        wait(0.1)
+        _G.NotAutoEquip = false
+    end
 end
 
 Setting:Toggle({
@@ -552,7 +574,7 @@ spawn(function()
 end)
 
 Setting:Section({ 
-    Title = "~ Setting Tween ~",
+    Title = "~ Tween ~",
     TextXAlignment = "Center"
 })
 
@@ -596,7 +618,7 @@ Setting:Button({
 })
 
 Setting:Section({ 
-    Title = "~ Setting Graphic & Reduce Lag ~",
+    Title = "~ Graphic & Reduce Lag ~",
     TextXAlignment = "Center"
 })
 
@@ -748,3 +770,107 @@ spawn(function()
 end)
 
 --= [ Tab Status & Server ] =--
+
+Server:Paragraph({
+    Title = "Soon",
+    Desc = "Soon",
+})
+
+--= [ Tab Farming ] =--
+
+Farming:Section({ 
+    Title = "~ Level ~",
+    TextXAlignment = "Center"
+})
+
+Farming:Dropdown({
+    Title = "Select Mode Farm Level",
+    -- Desc = "",
+    Multi = false,
+    Value = "Get Quest",
+    AllowNone = false,
+    Values = {"Get Quest","No Quest"},
+    Callback = function(V)
+        _G.LevelMode = V
+    end
+})
+
+Farming:Toggle({
+    Title = "Auto Farm Level",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.FarmLevel = V
+        StopTween(_G.FarmLevel)
+    end
+})
+
+spawn(function()
+    while wait() do
+        if _G.FarmLevel then
+            pcall(function()
+                CheckLevelQuest()
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameCheckQuest) and _G.LevelMode == "Get Quest" then
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                end
+                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
+                    BringLevel = false
+	    			topos(CFrameQuestLevel)
+		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 10 then
+	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
+                    end
+                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
+                    CheckQuest()
+                    if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if (v.Name == Monster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                repeat wait()
+                                    EquipWeapon(_G.SelectWeapon)
+                                    topos(v.HumanoidRootPart.CFrame * PosFarm)
+                                    PosFarm = v.HumanoidRootPart.CFrame
+                                    BringLevel = true
+                                until not _G.FarmLevel or not v.Parent or v.Humanoid.Health <= 0
+                            end
+                        end
+                    else
+                        BringLevel = false
+                        topos(CFrameMon)
+                        UnEquipWeapon(_G.SelectWeapon)
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+Farming:Toggle({
+    Title = "Auto Farm Nearest",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.FarmNearest = V
+        StopTween(_G.FarmNearest)
+    end
+})
+
+spawn(function()
+	while wait() do
+	    if _G.FarmNearest then
+	        pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+         	       if v.Name and v:FindFirstChild("Humanoid") then
+				        if v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500 then
+			 	           repeat wait()
+			     	           EquipWeapon(_G.SelectWeapon)
+			  	              topos(v.HumanoidRootPart.CFrame * PosFarm)
+			 	               PosNear = v.HumanoidRootPart.CFrame
+					        	BringNear = true
+				            until not _G.FarmNearest or not v.Parent or v.Humanoid.Health <= 0
+				            BringNear = false
+				        end
+				    end
+				end
+			end)
+		end
+	end
+end)
