@@ -196,7 +196,7 @@ function topos(Pos)
         lp.Character.Humanoid.Sit = false
     end
     _G.NoClip = true
-    Tween = game:GetService("TweenService"):Create(lp.Character.PartTele, TweenInfo.new(Distance / _G.FlySpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
+    Tween = game:GetService("TweenService"):Create(lp.Character.PartTele, TweenInfo.new(Distance / _G.TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
     if Distance <= 250 then
         Tween:Cancel()
         lp.Character.PartTele.CFrame = Pos
@@ -289,38 +289,57 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/re
 
 --= [ Ui & Tab ] =--
 
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-local Window = Rayfield:CreateWindow({
-   Name = "Z - Manazure Hub",
-   Icon = 0,
-   LoadingTitle = "Z - Manazure Hub",
-   LoadingSubtitle = "by ObieVN - discord.gg/TbcwPDnhbK",
-   Theme = "Default",
-   DisableRayfieldPrompts = true,
-   DisableBuildWarnings = true,
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "Z - Manazure Hub",
-      FileName = "Blox-Fruits"
-   }
+local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
+local Window = WindUI:CreateWindow({
+    Title = "Z - Manazure Hub",
+    Icon = "tree-palm",
+    Author = "ObieVN",
+    Folder = "Z - Manazure Hub",
+    Size = UDim2.fromOffset(550, 350),
+    Transparent = true,
+    Theme = "Dark",
+    SideBarWidth = 140,
+    HasOutline = true
 })
 
-local Setting = Window:CreateTab("Setting", "settings")
-local Farming = Window:CreateTab("Farming", "pickaxe")
+Window:EditOpenButton({
+    Title = "Open UI Button",
+    Icon = "tree-palm",
+    CornerRadius = UDim.new(0, 10),
+    StrokeThickness = 1.5,
+    Color = ColorSequence.new(
+        Color3.fromHex("FFFFFF"), 
+        Color3.fromHex("ADD8E6")
+    )
+})
+
+local Setting = Window:Tab({
+    Title = "Setting",
+    Icon = "settings"
+})
+
+local Farming = Window:Tab({
+    Title = "Farming",
+    Icon = "sword"
+})
 
 --= [ Tab Setting ] =--
 
-Setting:CreateSection("~ Setting Farming ~")
+Setting:Section({ 
+    Title = "~ Setting Farming ~",
+    TextXAlignment = "Center"
+})
 
-Setting:CreateDropdown({
-   Name = "Select Weapon",
-   Options = {"Melee","Sword","Blox Fruit","Gun"},
-   CurrentOption = {"Melee"},
-   MultipleOptions = false,
-   Flag = "SelectWeapon",
-   Callback = function(Cac)
-       _G.SelectWeapon = Cac
-   end
+Setting:Dropdown({
+    Title = "Select Weapon",
+    Desc = "",
+    Multi = false,
+    Value = "Melee",
+    AllowNone = false,
+    Values = {"Melee","Sword","Blox Fruit"},
+    Callback = function(V)
+        _G.SelectWeapon = V
+    end
 })
 
 function EquipWeapon(Weapon)
@@ -338,13 +357,13 @@ function EquipWeapon(Weapon)
     return a 
 end
 
-Setting:CreateToggle({
-   Name = "Fast Attack",
-   CurrentValue = true,
-   Flag = "FastAttack",
-   Callback = function(Cac)
-       _G.FastAttack = Cac
-   end
+Setting:Toggle({
+    Title = "Fast Attack",
+    Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.FastAttack = V
+    end
 })
 
 local targets = {}
@@ -394,13 +413,13 @@ spawn(function()
     end
 end)
 
-Setting:CreateToggle({
-   Name = "Auto Click",
-   CurrentValue = false,
-   Flag = "AutoClick",
-   Callback = function(Cac)
-       _G.AutoClick = Cac
-   end
+Setting:Toggle({
+    Title = "Auto Click",
+    Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.AutoClick = V
+    end
 })
 
 function AutoClick()
@@ -410,18 +429,21 @@ end
 
 spawn(function()
     while task.wait() do
-        AutoClick()
+        if _G.AutoClick then
+            AutoClick()
+        end
     end
 end)
 
-Setting:CreateDropdown({
-   Name = "Select Range Bring Mob",
-   Options = {"Very Close [ 250m ]","Near The [ 275m ]","Slightly Far [ 300m ]","Distant [ 325m ]","Really Far [ 350m ]"},
-   CurrentOption = {"Slightly Far [ 300m ]"},
-   MultipleOptions = false,
-   Flag = "RangeBring",
-   Callback = function(Cac)
-       _G.RangeBring = Cac
+Setting:Dropdown({
+    Title = "Select Range Bring Mob",
+    Desc = "",
+    Multi = false,
+    Value = "Melee",
+    AllowNone = false,
+    Values = {"Very Close [ 250m ]","Near The [ 275m ]","Slightly Far [ 300m ]","Distant [ 325m ]","Really Far [ 350m ]"},
+    Callback = function(V)
+        _G.RangeBring = V
         if _G.RangeBring == "Very Close [ 250m ]" then
             BringRange = 250
         elseif _G.RangeBring == "Near The [ 275m ]" then
@@ -433,16 +455,7 @@ Setting:CreateDropdown({
         elseif _G.RangeBring == "Really Far [ 350m ]" then
             BringRange = 350
         end
-   end
-})
-
-Setting:CreateToggle({
-   Name = "Bring Mob",
-   CurrentValue = true,
-   Flag = "BringMob",
-   Callback = function(Cac)
-       _G.BringMob = Cac
-   end
+    end
 })
 
 spawn(function()
@@ -471,7 +484,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if BringNear then
@@ -486,7 +499,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if _G.FarmMaterial and BringMaterial then
@@ -502,7 +515,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
         if _G.FarmMob and BringMob then
@@ -517,7 +530,7 @@ function BringMob()
                 if v.Humanoid:FindFirstChild("Animator") then
                     v.Humanoid.Animator:Destroy()
                 end
-                --sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
             end
         end
     end
@@ -533,187 +546,46 @@ spawn(function()
     end
 end)
 
-Setting:CreateSection("~ Move ~")
-
-Setting:CreateSlider({
-   Name = "Fly Speed",
-   Range = {1, 400},
-   Increment = 1,
-   Suffix = "",
-   CurrentValue = 350,
-   Flag = "FlySpeed",
-   Callback = function(Cac)
-       _G.FlySpees = Cac
-   end
+Setting:Section({ 
+    Title = "~ Setting Tween ~",
+    TextXAlignment = "Center"
 })
 
-Setting:CreateToggle({
-   Name = "Bypass Teleport",
-   CurrentValue = false,
-   Flag = "BypassTeleport",
-   Callback = function(Cac)
-       _G.BypassTeleport = Cac
-   end
+Setting:Slider({
+    Title = "Tween Speed",
+    Desc = "",
+    Step = 1,
+    Value = {
+        Min = 150,
+        Max = 400,
+        Default = 350,
+    },
+    Callback = function(V)
+        _G.TweenSpeed = V
+    end
 })
 
-Setting:CreateButton({
-   Name = "Stop Fly",
-   Callback = function()
-       _G.NoClip = false
-   end
+Setting:Toggle({
+    Title = "Dont Bypass Teleport If There Is Item",
+    Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.DontBT = V
+    end
 })
 
-Setting:CreateSection("~ Graphic & Reduce Lag ~")
-
-Setting:CreateToggle({
-   Name = "White Screen",
-   CurrentValue = false,
-   Flag = "WhiteScreen",
-   Callback = function(Cac)
-       _G.WhiteScreen = Cac
-		if _G.WhiteScreen == true then
-   	     game:GetService("RunService"):Set3dRenderingEnabled(false)
-	    elseif _G.WhiteScreen == false then
- 	       game:GetService("RunService"):Set3dRenderingEnabled(true)
-	    end
-   end
+Setting:Toggle({
+    Title = "Bypass Teleport",
+    Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.BypassTeleport = V
+    end
 })
 
-Setting:CreateToggle({
-   Name = "Disabled Notifications Text",
-   CurrentValue = false,
-   Flag = "DisabledNotifications",
-   Callback = function(Cac)
-       _G.DisabledNotifications = Cac
-   end
-})
-
-Setting:CreateToggle({
-   Name = "Disabled Damage Counter",
-   CurrentValue = true,
-   Flag = "DisabledDamage",
-   Callback = function(Cac)
-       _G.DisabledDamage = Cac
-   end
-})
-
-spawn(function()
-	while wait() do
-	    pcall(function()
-        	if _G.DisabledNotifications then
-	    		game.Players.LocalPlayer.PlayerGui.Notifications.Enabled = false
-    		else
-	    		game.Players.LocalPlayer.PlayerGui.Notifications.Enabled = true
-	    	end
-	    	if _G.DisabledDamage then
-	    		game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = false
-	    	else
-		    	game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = true
-    		end
-        end)
-	end
-end)
-
-Setting:CreateButton({
-    Name = "Remove Fog",
+Setting:Button({
+    Title = "Stop Tween",
     Callback = function()
-        game:GetService("Lighting").LightingLayers:Destroy()
-    	game:GetService("Lighting").Sky:Destroy()
+        _G.NoClip = false
     end
 })
-
-Setting:CreateButton({
-   Name = "Remove Lava",
-   Callback = function()
-       RemoveLava()
-   end
-})
-
-function RemoveLava()
-    for i,v in pairs(game.Workspace:GetDescendants()) do
-		if v.Name == "Lava" then
-			v:Destroy()
-		end
-	end
-	for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
-		if v.Name == "Lava" then
-			v:Destroy()
-		end
-	end
-end
-
-Setting:CreateButton({
-   Name = "Fps Booster",
-   Callback = function()
-       FpsBooster()
-   end
-})
-
-function FpsBooster()
-    local decalsyeeted = true
-    local g = game
-    local w = g.Workspace
-    local l = g.Lighting
-    local t = w.Terrain
-    sethiddenproperty(l,"Technology",2)
-    sethiddenproperty(t,"Decoration",false)
-    t.WaterWaveSize = 0
-    t.WaterWaveSpeed = 0
-    t.WaterReflectance = 0
-    t.WaterTransparency = 0
-    l.GlobalShadows = false
-    l.FogEnd = 9e9
-    l.Brightness = 0
-    settings().Rendering.QualityLevel = "Level01"
-    for i, v in pairs(g:GetDescendants()) do
-        if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
-            v.Material = "Plastic"
-            v.Reflectance = 0
-        elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-            v.Transparency = 1
-        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-            v.Lifetime = NumberRange.new(0)
-        elseif v:IsA("Explosion") then
-            v.BlastPressure = 1
-            v.BlastRadius = 1
-        elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-            v.Enabled = false
-        elseif v:IsA("MeshPart") then
-            v.Material = "Plastic"
-            v.Reflectance = 0
-            v.TextureID = 10385902758728957
-        end
-    end
-    for i, e in pairs(l:GetChildren()) do
-        if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-            e.Enabled = false
-        end
-    end
-end
-
-Setting:CreateSection("~ Other ~")
-
-Setting:CreateToggle({
-   Name = "Auto Rejoin When Disconnect",
-   CurrentValue = true,
-   Flag = "AutoRejoin",
-   Callback = function(Cac)
-       _G.AutoRejoin = Cac
-   end
-})
-
-function AutoRejoin()
-    getgenv().Rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
-		if child.Name == "ErrorPrompt" and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
-			game:GetService("TeleportService"):Teleport(game.PlaceId)
-		end
-	end)
-end
-
-spawn(function()
-	while wait() do
-		if _G.AutoRejoin then
-			AutoRejoin()
-		end
-	end
-end)
