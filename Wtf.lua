@@ -171,20 +171,6 @@ function CalcDistance(I, II)
 end
 
 function topos(Pos)
-    if not Pos then return end
-    if not lp.Character:FindFirstChild("PartTele") then
-        local PartTele = Instance.new("Part", lp.Character)
-        PartTele.Size = Vector3.new(0, 0, 0)
-        PartTele.Name = "PartTele"
-        PartTele.Anchored = true
-        PartTele.Transparency = 1
-        PartTele.CanCollide = false
-        PartTele.CFrame = WaitHRP(lp).CFrame
-        PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
-            task.wait(0.01)
-            WaitHRP(lp).CFrame = PartTele.CFrame
-        end)
-    end
     Portal = GetPortal(Pos)
     Spawn = GetBypassPos(Pos)
     MyCFrame = WaitHRP(lp).CFrame
@@ -201,7 +187,7 @@ function topos(Pos)
         lp.Character.Humanoid.Sit = false
     end
     _G.NoClip = true
-    Tween = game:GetService("TweenService"):Create(lp.Character.PartTele, TweenInfo.new(Distance / _G.TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
+    Tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character["HumanoidRootPart"], TweenInfo.new(Distance / _G.TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
     if Distance <= 250 then
         Tween:Cancel()
         lp.Character.PartTele.CFrame = Pos
@@ -798,7 +784,7 @@ Farming:Dropdown({
 Farming:Toggle({
     Title = "Auto Farm Level",
     -- Desc = "",
-    Value = true,
+    Value = false,
     Callback = function(V)
         _G.FarmLevel = V
         StopTween(_G.FarmLevel)
@@ -846,7 +832,7 @@ end)
 Farming:Toggle({
     Title = "Auto Farm Nearest",
     -- Desc = "",
-    Value = true,
+    Value = false,
     Callback = function(V)
         _G.FarmNearest = V
         StopTween(_G.FarmNearest)
