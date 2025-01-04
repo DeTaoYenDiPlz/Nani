@@ -771,9 +771,9 @@ end)
 
 --= [ Tab Status & Server ] =--
 
-Server:Paragraph({
+Status:Paragraph({
     Title = "Soon",
-    Desc = "Soon",
+    Desc = "Soon"
 })
 
 --= [ Tab Farming ] =--
