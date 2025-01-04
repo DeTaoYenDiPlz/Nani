@@ -70,8 +70,8 @@ for i, v in pairs(Workspace.NPCs:GetChildren()) do
     end
 end
 
-for i, v in pairs(getnilinstances()) do
-    if string.find(string.lower(v.Name), "home point") then
+for i, v in pairs(workspace:GetDescendants()) do
+    if string.find(string.lower(v.Name), "home point") and v:IsA("Model") then
         table.insert(NpcList, v:GetModelCFrame())
     end
 end
