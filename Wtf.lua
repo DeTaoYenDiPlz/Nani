@@ -67,19 +67,6 @@ end)
 
 local plrs = game.Players
 local lp = plrs.LocalPlayer
-local Workspace = game:GetService("Workspace")
-NpcList = {}
-for i, v in pairs(Workspace.NPCs:GetChildren()) do
-    if string.find(string.lower(v.Name), "home point") and v:IsA("Model") then
-        table.insert(NpcList, v:GetModelCFrame())
-    end
-end
-
-for i, v in pairs(workspace:GetDescendants()) do
-    if string.find(string.lower(v.Name), "home point") and v:IsA("Model") then
-        table.insert(NpcList, v:GetModelCFrame())
-    end
-end
 
 if game.PlaceId == 2753915549 then
     LocationNear = {
@@ -117,43 +104,10 @@ function GetPortal(check2)
     return aM
 end
 
-function BypassTeleport(is)
-    if lp.Character:FindFirstChild("PartTele") then
-        lp.Character.PartTele.CFrame = CFrame.new(lp.Character.PartTele.CFrame.X, lp.Character.PartTele.CFrame.Y, lp.Character.PartTele.CFrame.Z)
-        wait(0.6)
-        lp.Character.PartTele.CFrame = is
-        wait(0.2)
-        lp.Character.PrimaryPart.CFrame = is
-        lp.Character:WaitForChild("Humanoid"):ChangeState(15)
-        wait(0.6)
-        repeat task.wait() until lp.Character:FindFirstChild("Humanoid") and lp.Character.Humanoid.Health <= 0
-        repeat task.wait()
-            if lp.Character:FindFirstChild("PartTele") then
-                lp.Character.PartTele.CFrame = is
-            end
-            if lp.Character:FindFirstChild("PrimaryPart") then
-                lp.Character.PrimaryPart.CFrame = is
-            end
-        until lp.Character:FindFirstChild("Humanoid") and lp.Character.Humanoid.Health > 0
-    end
-end
-
-function GetBypassPos(pos)
-    pos = Vector3.new(pos.X, pos.Y, pos.Z)
-    local lll, mmm = nil, math.huge
-    for i, v in pairs(NpcList) do
-        if (v.p - pos).Magnitude < mmm then
-            lll = v
-            mmm = (v.p - pos).Magnitude
-        end
-    end
-    return lll
-end
-
 function RequestEntrance(check1)
     game.ReplicatedStorage.Remotes.CommF_:InvokeServer(unpack({"requestEntrance", check1}))
     if lp.Character:FindFirstChild("PartTele") then
-        lp.Character.PartTele.CFrame = WaitHRP(lp).CFrame
+        lp.Character.HumanoidRootPart.CFrame = WaitHRP(lp).CFrame
     end
     wait(0.01)
 end
@@ -172,34 +126,22 @@ end
 
 function topos(Pos)
     Portal = GetPortal(Pos)
-    Spawn = GetBypassPos(Pos)
     MyCFrame = WaitHRP(lp).CFrame
     Distance = CalcDistance(MyCFrame, Pos)
     if CalcDistance(Portal, Pos) < CalcDistance(Pos) and CalcDistance(Portal) > 1000 then
         return RequestEntrance(Portal)
     end
-    if _G.BypassTeleport then
-        if CalcDistance(Pos) - CalcDistance(Spawn, Pos) > 1500 and CalcDistance(Spawn) > 1500 then
-            return BypassTeleport(Spawn)
-        end
-    end
     if lp.Character:FindFirstChild("Humanoid") and lp.Character.Humanoid:FindFirstChild("Sit") and lp.Character.Humanoid.Sit == true then
         lp.Character.Humanoid.Sit = false
     end
     _G.NoClip = true
-    Tween = game:GetService("TweenService"):Create(lp.Character.HumanoidRootPart, TweenInfo.new(Distance / _G.TweenSpeed, Enum.EasingStyle.Linear), {CFrame = Pos})
+    Speed = _G.TweenSpeed or 350
+    Tween = game:GetService("TweenService"):Create(lp.Character.HumanoidRootPart, TweenInfo.new(.Position - lp.Character.HumanoidRootPart.Position).Magnitude / Speed, Enum.EasingStyle.Linear), {CFrame = Pos})
     if Distance <= 250 then
         Tween:Cancel()
         lp.Character.HumanoidRootPart.CFrame = Pos
     end
     Tween:Play()
-end
-
-function StopTween()
-    if not target then
-        topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-        _G.NoClip = false
-    end
 end
 
 Type = 1
@@ -286,7 +228,7 @@ local Window = WindUI:CreateWindow({
 })
 
 Window:EditOpenButton({
-    Title = "Open Menu",
+    Title = "Open UI Button",
     Icon = "tree-palm",
     CornerRadius = UDim.new(0, 10),
     StrokeThickness = 1.5,
@@ -314,7 +256,7 @@ local Farming = Window:Tab({
 --= [ Tab Setting ] =--
 
 Setting:Section({ 
-    Title = "~ Farming ~",
+    Title = "~ Setting Farming ~",
     TextXAlignment = "Center"
 })
 
@@ -343,16 +285,6 @@ function EquipWeapon(Weapon)
         end
     end
     return a 
-end
-
-function UnEquipWeapon(Weapon)
-    if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
-        _G.NotAutoEquip = true
-        wait(0.5)
-        game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
-        wait(0.1)
-        _G.NotAutoEquip = false
-    end
 end
 
 Setting:Toggle({
@@ -545,7 +477,7 @@ spawn(function()
 end)
 
 Setting:Section({ 
-    Title = "~ Tween ~",
+    Title = "~ Setting Tween ~",
     TextXAlignment = "Center"
 })
 
@@ -572,15 +504,6 @@ Setting:Toggle({
     end
 })
 
-Setting:Toggle({
-    Title = "Bypass Teleport",
-    -- Desc = "",
-    Value = false,
-    Callback = function(V)
-        _G.BypassTeleport = V
-    end
-})
-
 Setting:Button({
     Title = "Stop Tween",
     Callback = function()
@@ -589,7 +512,7 @@ Setting:Button({
 })
 
 Setting:Section({ 
-    Title = "~ Graphic & Reduce Lag ~",
+    Title = "~ Setting Graphic & Reduce Lag ~",
     TextXAlignment = "Center"
 })
 
@@ -741,107 +664,3 @@ spawn(function()
 end)
 
 --= [ Tab Status & Server ] =--
-
-Status:Paragraph({
-    Title = "Soon",
-    Desc = "Soon"
-})
-
---= [ Tab Farming ] =--
-
-Farming:Section({ 
-    Title = "~ Level ~",
-    TextXAlignment = "Center"
-})
-
-Farming:Dropdown({
-    Title = "Select Mode Farm Level",
-    -- Desc = "",
-    Multi = false,
-    Value = "Get Quest",
-    AllowNone = false,
-    Values = {"Get Quest","No Quest"},
-    Callback = function(V)
-        _G.LevelMode = V
-    end
-})
-
-Farming:Toggle({
-    Title = "Auto Farm Level",
-    -- Desc = "",
-    Value = false,
-    Callback = function(V)
-        _G.FarmLevel = V
-        StopTween(_G.FarmLevel)
-    end
-})
-
-spawn(function()
-    while wait() do
-        if _G.FarmLevel then
-            pcall(function()
-                CheckLevelQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameCheckQuest) and _G.LevelMode == "Get Quest" then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                end
-                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
-                    BringLevel = false
-	    			topos(CFrameQuestLevel)
-		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 10 then
-	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
-                    end
-                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
-                    CheckQuest()
-                    if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if (v.Name == Monster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                repeat wait()
-                                    EquipWeapon(_G.SelectWeapon)
-                                    topos(v.HumanoidRootPart.CFrame * PosFarm)
-                                    PosFarm = v.HumanoidRootPart.CFrame
-                                    BringLevel = true
-                                until not _G.FarmLevel or not v.Parent or v.Humanoid.Health <= 0
-                            end
-                        end
-                    else
-                        BringLevel = false
-                        topos(CFrameMon)
-                        UnEquipWeapon(_G.SelectWeapon)
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-Farming:Toggle({
-    Title = "Auto Farm Nearest",
-    -- Desc = "",
-    Value = false,
-    Callback = function(V)
-        _G.FarmNearest = V
-        StopTween(_G.FarmNearest)
-    end
-})
-
-spawn(function()
-	while wait() do
-	    if _G.FarmNearest then
-	        pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-         	       if v.Name and v:FindFirstChild("Humanoid") then
-				        if v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500 then
-			 	           repeat wait()
-			     	           EquipWeapon(_G.SelectWeapon)
-			  	              topos(v.HumanoidRootPart.CFrame * PosFarm)
-			 	               PosNear = v.HumanoidRootPart.CFrame
-					        	BringNear = true
-				            until not _G.FarmNearest or not v.Parent or v.Humanoid.Health <= 0
-				            BringNear = false
-				        end
-				    end
-				end
-			end)
-		end
-	end
-end)
