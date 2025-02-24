@@ -264,6 +264,8 @@ local Farming = Window:Tab({
     Icon = "sword"
 })
 
+Window:SelectTab(1)
+
 --= [ Tab Setting ] =--
 
 Setting:Section({ 
