@@ -797,12 +797,8 @@ function function8()
     return tostring(function6())
 end
 
-function FullMoonCheck()
-    return function8()
-end
-
 spawn(function()
     while task.wait() do
-        Moon:SetDesc(FullMoonCheck())
+        Moon:SetDesc(CheckMoon() .. "|" .. function8())
     end
 end)
