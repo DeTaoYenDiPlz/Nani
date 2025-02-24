@@ -805,4 +805,4 @@ spawn(function()
     while task.wait() do
         Moon:SetDesc(FullMoonCheck())
     end
-end
+end)
