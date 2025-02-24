@@ -226,10 +226,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/re
 --= [ Ui & Tab ] =--
 
 local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
+WindUI:SetNotificationLower(true)
 local Window = WindUI:CreateWindow({
     Title = "Z - Manazure Hub",
     Icon = "tree-palm",
-    Author = "ObieVN",
+    Author = "Developer by ObieVN",
     Folder = "Z - Manazure Hub",
     Size = UDim2.fromOffset(550, 350),
     Transparent = true,
@@ -697,3 +698,16 @@ spawn(function()
 end)
 
 --= [ Status & Server ] =--
+
+spawn(function()
+	while wait() do
+		pcall(function()
+			local L_284_ = game.Workspace.DistributedGameTime;
+			local L_285_ = L_284_ % 60;
+			local L_286_ = math.floor(L_284_ / 60 % 60)
+			local L_287_ = math.floor(L_284_ / 3600)
+			local L_288_ = string.format("%.0fh:%.0fm:%.0fs", L_287_, L_286_, L_285_)
+			L_37_:Set(L_288_)
+		end)
+	end
+end)
