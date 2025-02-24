@@ -699,15 +699,20 @@ end)
 
 --= [ Status & Server ] =--
 
+local Time = Status:Paragraph({
+    Title = "Time Online",
+    Desc = "None",
+})
+
 spawn(function()
-	while wait() do
+	while task.wait() do
 		pcall(function()
-			local L_284_ = game.Workspace.DistributedGameTime;
-			local L_285_ = L_284_ % 60;
-			local L_286_ = math.floor(L_284_ / 60 % 60)
-			local L_287_ = math.floor(L_284_ / 3600)
-			local L_288_ = string.format("%.0fh:%.0fm:%.0fs", L_287_, L_286_, L_285_)
-			L_37_:Set(L_288_)
+			local A = game.Workspace.DistributedGameTime;
+			local B = A % 60;
+			local C = math.floor(A / 60 % 60)
+			local D = math.floor(A / 3600)
+			local E = string.format("%.0f Hour %.0f Minute %.0f Second", D, C, B)
+			Time:SetDesc(E)
 		end)
 	end
 end)
