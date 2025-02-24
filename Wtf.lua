@@ -724,9 +724,9 @@ local Moon = Status:Paragraph({
 
 function MoonTextureId()
     if FirstSea then
-        return game:GetService("Lighting").FantasySky.MoonTextureId
+        return game:GetService("Lighting").Sky.MoonTextureId
     elseif SecondSea then
-        return game:GetService("Lighting").FantasySky.MoonTextureId
+        return game:GetService("Lighting").Sky.MoonTextureId
     elseif ThirdSea then
         return game:GetService("Lighting").Sky.MoonTextureId
     end
