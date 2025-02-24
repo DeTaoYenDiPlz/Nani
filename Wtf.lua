@@ -530,3 +530,158 @@ Setting:Button({
         _G.NoClip = false
     end
 })
+
+Setting:Section({ 
+    Title = "~ Setting Graphic & Reduce Lag ~",
+    TextXAlignment = "Center"
+})
+
+Setting:Toggle({
+    Title = "White Screen",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.WhiteScreen = V
+		if _G.WhiteScreen == true then
+   	     game:GetService("RunService"):Set3dRenderingEnabled(false)
+	    elseif _G.WhiteScreen == false then
+ 	       game:GetService("RunService"):Set3dRenderingEnabled(true)
+	    end
+    end
+})
+
+Setting:Toggle({
+    Title = "Hiden Notifications Text",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.DisabledNotifications = V
+		if _G.DisabledNotifications == true then
+   	    game.Players.LocalPlayer.PlayerGui.Notifications.Enabled = false
+	    elseif _G.DisabledNotifications == false then
+ 	       game.Players.LocalPlayer.PlayerGui.Notifications.Enabled = true
+	    end
+    end
+})
+
+Setting:Toggle({
+    Title = "Hiden Damage Counter",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.DisabledDamage = V
+		if _G.DisabledDamage == true then
+   	     game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = false
+	    elseif _G.DisabledDamage == false then
+ 	       game:GetService("ReplicatedStorage").Assets.GUI.DamageCounter.Enabled = true
+	    end
+    end
+})
+
+Setting:Button({
+    Title = "Remove Fog",
+    -- Desc = "",
+    Callback = function()
+        game:GetService("Lighting").BaseAtmosphere:Destroy()
+    	game:GetService("Lighting").SeaTerrorCC:Destroy()
+    	game.Lighting.LightingLayers.DarkFog:Destroy()
+        game:GetService("Lighting").LightingLayers:Destroy()
+    	game:GetService("Lighting").Sky:Destroy()
+    end
+})
+
+Setting:Button({
+   Title = "Remove Lava",
+    -- Desc = "",
+   Callback = function()
+       RemoveLava()
+   end
+})
+
+function RemoveLava()
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+		if v.Name == "Lava" then
+			v:Destroy()
+		end
+	end
+	for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
+		if v.Name == "Lava" then
+			v:Destroy()
+		end
+	end
+end
+
+Setting:Button({
+   Title = "Fps Booster",
+    -- Desc = "",
+   Callback = function()
+       FpsBooster()
+   end
+})
+
+function FpsBooster()
+    local decalsyeeted = true
+    local g = game
+    local w = g.Workspace
+    local l = g.Lighting
+    local t = w.Terrain
+    sethiddenproperty(l,"Technology",2)
+    sethiddenproperty(t,"Decoration",false)
+    t.WaterWaveSize = 0
+    t.WaterWaveSpeed = 0
+    t.WaterReflectance = 0
+    t.WaterTransparency = 0
+    l.GlobalShadows = false
+    l.FogEnd = 9e9
+    l.Brightness = 0
+    settings().Rendering.QualityLevel = "Level01"
+    for i, v in pairs(g:GetDescendants()) do
+        if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+            v.Material = "Plastic"
+            v.Reflectance = 0
+        elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+            v.Transparency = 1
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+            v.Lifetime = NumberRange.new(0)
+        elseif v:IsA("Explosion") then
+            v.BlastPressure = 1
+            v.BlastRadius = 1
+        elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+            v.Enabled = false
+        elseif v:IsA("MeshPart") then
+            v.Material = "Plastic"
+            v.Reflectance = 0
+            v.TextureID = 10385902758728957
+        end
+    end
+    for i, e in pairs(l:GetChildren()) do
+        if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+            e.Enabled = false
+        end
+    end
+end
+
+Setting:Toggle({
+    Title = "Auto Rejoin When Disconnect",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.AutoRejoin = V
+    end
+})
+
+function AutoRejoin()
+    getgenv().Rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+		if child.Name == "ErrorPrompt" and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
+			game:GetService("TeleportService"):Teleport(game.PlaceId)
+		end
+	end)
+end
+
+spawn(function()
+	while wait() do
+		if _G.AutoRejoin then
+			AutoRejoin()
+		end
+	end
+end)
