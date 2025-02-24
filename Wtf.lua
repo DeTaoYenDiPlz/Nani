@@ -582,11 +582,23 @@ Setting:Button({
     Title = "Remove Fog",
     -- Desc = "",
     Callback = function()
-        game:GetService("Lighting").BaseAtmosphere:Destroy()
-    	game:GetService("Lighting").SeaTerrorCC:Destroy()
-    	game.Lighting.LightingLayers.DarkFog:Destroy()
-        game:GetService("Lighting").LightingLayers:Destroy()
-    	game:GetService("Lighting").Sky:Destroy()
+        local v382 = game:GetService("Lighting")
+        if v382:FindFirstChild("BaseAtmosphere") then
+            v382.BaseAtmosphere:Destroy()
+        end
+        if v382:FindFirstChild("SeaTerrorCC") then
+            v382.SeaTerrorCC:Destroy()
+        end
+        if v382:FindFirstChild("LightingLayers") then
+            if v382.LightingLayers:FindFirstChild("Atmosphere") then
+                v382.LightingLayers.Atmosphere:Destroy()
+            end
+            wait()
+            if v382.LightingLayers:FindFirstChild("DarkFog") then
+                v382.LightingLayers.DarkFog:Destroy()
+            end
+        end
+        v382.FogEnd = 100000
     end
 })
 
@@ -594,28 +606,24 @@ Setting:Button({
    Title = "Remove Lava",
     -- Desc = "",
    Callback = function()
-       RemoveLava()
+        for i,v in pairs(game.Workspace:GetDescendants()) do
+    		if v.Name == "Lava" then
+	    		v:Destroy()
+    		end
+    	end
+    	for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
+    		if v.Name == "Lava" then
+    			v:Destroy()
+        	end
+        end
    end
 })
-
-function RemoveLava()
-    for i,v in pairs(game.Workspace:GetDescendants()) do
-		if v.Name == "Lava" then
-			v:Destroy()
-		end
-	end
-	for i,v in pairs(game.ReplicatedStorage:GetDescendants()) do
-		if v.Name == "Lava" then
-			v:Destroy()
-		end
-	end
-end
 
 Setting:Button({
    Title = "Fps Booster",
     -- Desc = "",
    Callback = function()
-       FpsBooster()
+        FpsBooster()
    end
 })
 
@@ -685,3 +693,5 @@ spawn(function()
 		end
 	end
 end)
+
+--= [ Status & Server ] =--
