@@ -228,10 +228,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/re
 local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
 WindUI:SetNotificationLower(true)
 local Window = WindUI:CreateWindow({
-    Title = "Z - Manazure Hub",
+    Title = "Manazure Hub - Blox Fruits",
     Icon = "tree-palm",
     Author = "Developer by ObieVN",
-    Folder = "Z - Manazure Hub",
+    Folder = "Manazure Hub",
     Size = UDim2.fromOffset(550, 350),
     Transparent = true,
     Theme = "Dark",
@@ -699,6 +699,11 @@ end)
 
 --= [ Status & Server ] =--
 
+Status:Section({ 
+    Title = "~ Status ~",
+    TextXAlignment = "Center"
+})
+
 local Time = Status:Paragraph({
     Title = "Time Online In Server",
     Desc = "None"
@@ -753,18 +758,6 @@ function CheckMoon()
     return cofullmoonkothangbeo
 end
 
-function function7()
-    GameTime = "Error"
-    local c = game.Lighting
-    local ao = c.ClockTime
-    if ao >= 18 or ao < 5 then
-        GameTime = "Night"
-    else
-        GameTime = "Day"
-    end
-    return GameTime
-end
-
 function function6()
     return math.floor(game.Lighting.ClockTime)
 end
@@ -799,6 +792,53 @@ end
 
 spawn(function()
     while task.wait() do
-        Moon:SetDesc(CheckMoon() .. "|" .. function8())
+        Moon:SetDesc(CheckMoon() .. " | " .. function8())
     end
 end)
+
+Status:Section({ 
+    Title = "~ Server ~",
+    TextXAlignment = "Center"
+})
+
+Status:Input({
+    Title = "Input Job Id",
+    Default = "",
+    Placeholder = "Enter Job Id Here",
+    Callback = function(V)
+        _G.JobId = V
+    end
+})
+
+Status:Button({
+   Title = "Join Job Id Server ",
+    -- Desc = "",
+   Callback = function()
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId, _G.JobId, game.Players.LocalPlayer)
+   end
+})
+
+Status:Toggle({
+    Title = "Spam Join Job Id Server",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.SpamJoin = V
+    end
+})
+
+spawn(function()
+	while wait(1) do
+		if _G.SpamJoin then
+			game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId, _G.JobId, game.Players.LocalPlayer)
+		end
+	end
+end)
+
+Status:Button({
+   Title = "Copy Job Id Server",
+    -- Desc = "",
+   Callback = function()
+        setclipboard(tostring(game.JobId))
+   end
+})
