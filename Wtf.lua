@@ -157,19 +157,22 @@ function topos(Pos)
 	local Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
 	local Speed = _G.TweenSpeed or 350
 	local Tween = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear), {CFrame = Pos})
-    if CalcDistance(GetPortal(Pos), Pos) < CalcDistance(Pos) and CalcDistance(GetPortal(Pos)) > 800 then
-        return RequestEntrance(GetPortal(Pos))
+	if _G.PortalTeleport then
+        if CalcDistance(GetPortal(Pos), Pos) < CalcDistance(Pos) and CalcDistance(GetPortal(Pos)) > 800 then
+            return RequestEntrance(GetPortal(Pos))
+        end
     end
+    if _G.BypassTeleport and Distance >= 3000 then
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(15)
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
+	end
     _G.NoClip = true
 	if Distance <= 300 then
-	    Tween:Cancel()
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	else
     	Tween:Play()
 	end
 end
-
-topos(CFrame.new(5127.1284179688, 59.501365661621, 4105.4458007813))
 
 function StopTween(Pos)
 	if not Pos then
@@ -218,18 +221,9 @@ spawn(function()
     end
 end)
 
---= [ Check World & Not Support Game ] =--
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DeTaoYenDiPlz/Nani/refs/heads/main/IdkApi.lua"))()
 
-if game.PlaceId == 2753915549 then
-    FirstSea = true
-elseif game.PlaceId == 4442272183 then
-    SecondSea = true
-elseif game.PlaceId == 7449423635 then
-    ThirdSea = true
-else
-    game.Players.LocalPlayer:Kick("Script Only Support Blox Fruits")
-end
-
+--= [ Ui & Tab ] =--
 
 local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI"))()
 local Window = WindUI:CreateWindow({
@@ -245,7 +239,7 @@ local Window = WindUI:CreateWindow({
 })
 
 Window:EditOpenButton({
-    Title = "Open UI Button",
+    Title = "Open",
     Icon = "tree-palm",
     CornerRadius = UDim.new(0, 10),
     StrokeThickness = 1.5,
@@ -262,7 +256,7 @@ local Setting = Window:Tab({
 
 local Status = Window:Tab({
     Title = "Status & Server",
-    Icon = "sword"
+    Icon = "server"
 })
 
 local Farming = Window:Tab({
@@ -275,4 +269,264 @@ local Farming = Window:Tab({
 Setting:Section({ 
     Title = "~ Setting Farming ~",
     TextXAlignment = "Center"
+})
+
+Setting:Dropdown({
+    Title = "Select Weapon",
+    -- Desc = "",
+    Multi = false,
+    Value = "Melee",
+    AllowNone = false,
+    Values = {"Melee","Sword","Blox Fruit"},
+    Callback = function(V)
+        _G.SelectWeapon = V
+    end
+})
+
+function EquipWeapon(Weapon)
+    local a 
+    for i,v in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+        if v:IsA("Tool") and v.ToolTip == Weapon then
+            a = v.Name
+        end
+    end
+    for i,v in next, game.Players.LocalPlayer.Character:GetChildren() do
+        if v:IsA("Tool") and v.ToolTip == Weapon then
+            a = v.Name
+        end
+    end
+    return a
+end
+
+Setting:Toggle({
+    Title = "Fast Attack",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.FastAttack = V
+    end
+})
+
+local targets = {}
+local targetName = nil
+
+function Attack(target)
+    if target[1]:FindFirstChild("HumanoidRootPart") and target[2]:FindFirstChild("HumanoidRootPart") and target[3]:FindFirstChild("HumanoidRootPart") and target[4]:FindFirstChild("HumanoidRootPart") then
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack"):FireServer(0)        
+        local args = {
+            [1] = target[1]:WaitForChild("Head"),
+            [2] = {
+                [1] = {
+                    [1] = target[2],
+                    [2] = target[2]:WaitForChild("HumanoidRootPart")
+                    },
+                [2] = {
+                    [1] = target[3],
+                    [2] = target[3]:WaitForChild("HumanoidRootPart")
+                    },
+                }
+            }
+        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit"):FireServer(unpack(args))
+    end
+end
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.FastAttack then
+                for i, v in pairs(workspace:FindFirstChild("Enemies"):GetChildren()) do
+                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude <= 60 then
+                            if targetName == nil or targetName == v.Name and FastAttackMon == v.Name then
+                                table.insert(targets, v)
+                                targetName = v.Name
+                            else
+                                targetName = FastAttackMon
+                            end
+                        end
+                    end
+                end
+                Attack(targets)
+                targets = {}
+                targetName = nil
+            end
+        end)
+    end
+end)
+
+Setting:Toggle({
+    Title = "Auto Click",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.AutoClick = V
+    end
+})
+
+function AutoClick()
+	game:GetService("VirtualUser"):CaptureController()
+	game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
+end
+
+spawn(function()
+    while task.wait() do
+        if _G.AutoClick then
+            AutoClick()
+        end
+    end
+end)
+
+Setting:Dropdown({
+    Title = "Select Range Bring Mob",
+    -- Desc = "",
+    Multi = false,
+    Value = "Slightly Far [ 300m ]",
+    AllowNone = false,
+    Values = {"Very Close [ 250m ]","Near The [ 275m ]","Slightly Far [ 300m ]","Distant [ 325m ]","Really Far [ 350m ]"},
+    Callback = function(V)
+        _G.RangeBring = V
+        if _G.RangeBring == "Very Close [ 250m ]" then
+            BringRange = 250
+        elseif _G.RangeBring == "Near The [ 275m ]" then
+            BringRange = 275
+        elseif _G.RangeBring == "Slightly Far [ 300m ]" then
+            BringRange = 300
+        elseif _G.RangeBring == "Distant [ 325m ]" then
+            BringRange = 325
+        elseif _G.RangeBring == "Really Far [ 350m ]" then
+            BringRange = 350
+        end
+    end
+})
+
+spawn(function()
+	while task.wait() do
+		if setscriptable then
+			setscriptable(game.Players.LocalPlayer, "SimulationRadius", true)
+		end
+		if sethiddenproperty then
+			sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+		end
+	end
+end)
+
+function BringMob()
+   for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+        if _G.FarmLevel or _G.FruitMastery or _G.GunMastery or _G.FarmAllMelee or _G.FarmAllSword and BringLevel then
+            CheckLevelQuest()
+            if (v.Name == Monster) and (v.HumanoidRootPart.Position - PosFarm.Position).Magnitude <= BringRange then
+                v.HumanoidRootPart.CFrame = PosFarm
+                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                v.Humanoid:ChangeState(11)
+                v.Humanoid.JumpPower = 0
+                v.Humanoid.WalkSpeed = 0
+                v.HumanoidRootPart.CanCollide = false
+                v.Head.CanCollide = false
+                if v.Humanoid:FindFirstChild("Animator") then
+                    v.Humanoid.Animator:Destroy()
+                end
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end
+        if BringNear then
+            if not string.find(v.Name, "Boss") and (v.HumanoidRootPart.Position - PosNear.Position).Magnitude <= BringRange then
+                v.HumanoidRootPart.CFrame = PosNear
+                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                v.Humanoid:ChangeState(11)
+                v.Humanoid.JumpPower = 0
+                v.Humanoid.WalkSpeed = 0
+                v.HumanoidRootPart.CanCollide = false
+                v.Head.CanCollide = false
+                if v.Humanoid:FindFirstChild("Animator") then
+                    v.Humanoid.Animator:Destroy()
+                end
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end
+        if _G.FarmMaterial and BringMaterial then
+            CheckMaterial()
+            if (v.Name == MaterialMob) and (v.HumanoidRootPart.Position - MaterialPos.Position).Magnitude <= BringRange then
+                v.HumanoidRootPart.CFrame = PosMaterial
+                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                v.Humanoid:ChangeState(11)
+                v.Humanoid.JumpPower = 0
+                v.Humanoid.WalkSpeed = 0
+                v.HumanoidRootPart.CanCollide = false
+                v.Head.CanCollide = false
+                if v.Humanoid:FindFirstChild("Animator") then
+                    v.Humanoid.Animator:Destroy()
+                end
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end
+        if _G.FarmMob and BringMob then
+            if (v.Name == _G.SelectMob) and (v.HumanoidRootPart.Position - PosMonFarm.Position).Magnitude <= BringRange then
+                v.HumanoidRootPart.CFrame = PosMob
+                v.HumanoidRootPart.Size = Vector3.new(60,60,60)
+                v.Humanoid:ChangeState(11)
+                v.Humanoid.JumpPower = 0
+                v.Humanoid.WalkSpeed = 0
+                v.HumanoidRootPart.CanCollide = false
+                v.Head.CanCollide = false
+                if v.Humanoid:FindFirstChild("Animator") then
+                    v.Humanoid.Animator:Destroy()
+                end
+                sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", math.huge)
+            end
+        end
+    end
+end
+
+spawn(function()
+    while wait() do
+        if _G.BringMob then
+            pcall(function()
+                BringMob()
+            end)
+        end
+    end
+end)
+
+Setting:Section({ 
+    Title = "~ Setting Tween ~",
+    TextXAlignment = "Center"
+})
+
+Setting:Slider({
+    Title = "Tween Speed",
+    -- Desc = "",
+    Step = 1,
+    Value = {
+        Min = 150,
+        Max = 400,
+        Default = 350,
+    },
+    Callback = function(V)
+        _G.TweenSpeed = V
+    end
+})
+
+Setting:Toggle({
+    Title = "Portal Teleport",
+    -- Desc = "",
+    Value = true,
+    Callback = function(V)
+        _G.PortalTeleport = V
+    end
+})
+
+Setting:Toggle({
+    Title = "Bypass Teleport",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.BypassTeleport = V
+    end
+})
+
+Setting:Button({
+    Title = "Stop Tween",
+    Callback = function()
+        _G.NoClip = false
+    end
 })
