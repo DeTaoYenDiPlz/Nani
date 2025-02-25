@@ -1057,10 +1057,199 @@ Farming:Toggle({
     end
 })
 
+function CheckLevelQuest()
+	local MyLevel = game.Players.LocalPlayer.Data.Level.Value
+	if FirstSea then
+		if (MyLevel == 1 or MyLevel <= 9) or (_G.SelectMob == "Bandit [Lv. 5]") then
+			Monster = "Bandit [Lv. 5]"
+			NameQuest = "BanditQuest1"
+			LevelQuest = 1
+			NameCheckQuest = "Bandit"
+			CFrameMon = CFrame.new(1145, 17, 1634)
+			CFrameQuestLevel = CFrame.new(1060, 17, 1547)
+		elseif (MyLevel == 10 or MyLevel <= 14) or (_G.SelectMob == "Monkey [Lv. 14]") then
+			Monster = "Monkey [Lv. 14]"
+			NameQuest = "JungleQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Monkey"
+			CFrameMon = CFrame.new(-1496, 39, 35)
+			CFrameQuestLevel = CFrame.new(-1602, 37, 152)
+		elseif (MyLevel == 15 or MyLevel <= 29) or (_G.SelectMob == "Gorilla [Lv. 20]") then
+			Monster = "Gorilla [Lv. 20]"
+			NameQuest = "JungleQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Gorilla"
+			CFrameMon = CFrame.new(-1237, 6, -486)
+			CFrameQuestLevel = CFrame.new(-1602, 37, 152)
+		elseif (MyLevel == 30 or MyLevel <= 39) or (_G.SelectMob == "Pirate [Lv. 35]") then
+			Monster = "Pirate [Lv. 35]"
+			NameQuest = "BuggyQuest1"
+			LevelQuest = 1
+			NameCheckQuest = "Pirate"
+			CFrameMon = CFrame.new(-1115, 14, 3938)
+			CFrameQuestLevel = CFrame.new(-1140, 5, 3828)
+		elseif (MyLevel == 40 or MyLevel <= 59) or (_G.SelectMob == "Brute [Lv. 45]") then
+			Monster = "Brute [Lv. 45]"
+			NameQuest = "BuggyQuest1"
+			LevelQuest = 2
+			NameCheckQuest = "Brute"
+			CFrameMon = CFrame.new(-1145, 15, 4350)
+			CFrameQuestLevel = CFrame.new(-1140, 5, 3828)
+		elseif (MyLevel == 60 or MyLevel <= 74) or (_G.SelectMob == "Desert Bandit [Lv. 60]") then
+			Monster = "Desert Bandit [Lv. 60]"
+			NameQuest = "DesertQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Desert Bandit"
+			CFrameMon = CFrame.new(932, 7, 4484)
+			CFrameQuestLevel = CFrame.new(897, 7, 4388)
+		elseif (MyLevel == 75 or MyLevel <= 89) or (_G.SelectMob == "Desert Officer [Lv. 70]") then
+			Monster = "Desert Officer [Lv. 70]"
+			NameQuest = "DesertQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Desert Officer"
+			CFrameMon = CFrame.new(1572, 10, 4373)
+			CFrameQuestLevel = CFrame.new(897, 7, 4388)
+		elseif (MyLevel == 90 or MyLevel <= 99) or (_G.SelectMob == "Snow Bandit [Lv. 90]") then
+			Monster = "Snow Bandit [Lv. 90]"
+			NameQuest = "SnowQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Snow Bandits"
+			CFrameMon = CFrame.new(1289, 150, -1442)
+			CFrameQuestLevel = CFrame.new(1386, 87, -1297)
+		elseif (MyLevel == 100 or MyLevel <= 119) or (_G.SelectMob == "Snowman [Lv. 100]") then
+			Monster = "Snowman [Lv. 100]"
+			NameQuest = "SnowQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Snowman"
+			CFrameMon = CFrame.new(1289, 150, -1442)
+			CFrameQuestLevel = CFrame.new(1386, 87, -1297)
+		elseif (MyLevel == 120 or MyLevel <= 149) or (_G.SelectMob == "Chief Petty Officer [Lv. 120]") then
+			Monster = "Chief Petty Officer [Lv. 120]"
+			NameQuest = "MarineQuest2"
+			LevelQuest = 1
+			NameCheckQuest = "Chief Petty Officer"
+			CFrameMon = CFrame.new(-4855, 23, 4308)
+			CFrameQuestLevel = CFrame.new(-5036, 29, 4325)
+		elseif (MyLevel == 150 or MyLevel <= 174) or (_G.SelectMob == "Sky Bandit [Lv. 150]") then
+			Monster = "Sky Bandit [Lv. 150]"
+			NameQuest = "SkyQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Sky Bandit"
+			CFrameMon = CFrame.new(-4981, 278, -2830)
+			CFrameQuestLevel = CFrame.new(-4842, 718, -2623)
+		elseif (MyLevel == 175 or MyLevel <= 189) or (_G.SelectMob == "Dark Master [Lv. 175]") then
+			Monster = "Dark Master [Lv. 175]"
+			NameQuest = "SkyQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Dark Master"
+			CFrameMon = CFrame.new(-5250, 389, -2272)
+			CFrameQuestLevel = CFrame.new(-4842, 718, -2623)
+		elseif (MyLevel == 190 or MyLevel <= 209) or (_G.SelectMob == "Prisoner [Lv. 190]") then
+			Monster = "Prisoner [Lv. 190]"
+			NameQuest = "PrisonerQuest"
+			LevelQuest = 1
+			NameCheckQuest = "8 Prisoners"
+			CFrameMon = CFrame.new(5411, 96, 690)
+			CFrameQuestLevel = CFrame.new(5308, 2, 474)
+		elseif (MyLevel == 210 or MyLevel <= 249) or (_G.SelectMob == "Dangerous Prisoner [Lv. 210]") then
+			Monster = "Dangerous Prisoner [Lv. 210]"
+			NameQuest = "PrisonerQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Dangerous Prisoner"
+			CFrameMon = CFrame.new(5411, 96, 690)
+			CFrameQuestLevel = CFrame.new(5308, 2, 474)
+		elseif (MyLevel == 250 or MyLevel <= 274) or (_G.SelectMob == "Toga Warrior [Lv. 250]") then
+			Monster = "Toga Warrior [Lv. 250]"
+			NameQuest = "ColosseumQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Toga Warrior"
+			CFrameMon = CFrame.new(-1641.4344482421875, 7.415142059326172, -2864.462646484375)
+			CFrameQuestLevel = CFrame.new(-1576, 8, -2985)
+		elseif (MyLevel == 275 or MyLevel <= 299) or (_G.SelectMob == "Gladiator [Lv. 275]") then
+			Monster = "Gladiator [Lv. 275]"
+			NameQuest = "ColosseumQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Gladiato"
+			CFrameMon = CFrame.new(-1385.5233154296875, 7.468349456787109, -3163.066650390625)
+			CFrameQuestLevel = CFrame.new(-1576, 8, -2985)
+		elseif (MyLevel == 300 or MyLevel <= 329) or (_G.SelectMob == "Military Soldier [Lv. 300]") then
+			Monster = "Military Soldier [Lv. 300]"
+			NameQuest = "MagmaQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Military Soldier"
+			CFrameMon = CFrame.new(-5408, 11, 8447)
+			CFrameQuestLevel = CFrame.new(-5316, 12, 8517)
+		elseif (MyLevel == 330 or MyLevel <= 374) or (_G.SelectMob == "Military Spy [Lv. 325]") then
+			Monster = "Military Spy [Lv. 325]"
+			NameQuest = "MagmaQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Military Spy"
+			CFrameMon = CFrame.new(-5815, 84, 8820)
+			CFrameQuestLevel = CFrame.new(-5316, 12, 8517)
+		elseif (MyLevel == 375 or MyLevel <= 399) or (_G.SelectMob == "Fishman Warrior [Lv. 375]") then
+			Monster = "Fishman Warrior [Lv. 375]"
+			NameQuest = "FishmanQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Fishman Warrior"
+			CFrameMon = CFrame.new(60859, 19, 1501)
+			CFrameQuestLevel = CFrame.new(61123, 19, 1569)
+		elseif (MyLevel == 400 or MyLevel <= 449) or (_G.SelectMob == "Fishman Commando [Lv. 400]") then
+			Monster = "Fishman Commando [Lv. 400]"
+			NameQuest = "FishmanQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Fishman Commando"
+			CFrameMon = CFrame.new(61891, 19, 1470)
+			CFrameQuestLevel = CFrame.new(61123, 19, 1569)
+		elseif (MyLevel == 450 or MyLevel <= 474) or (_G.SelectMob == "God's Guard [Lv. 450]") then
+			Monster = "God's Guard [Lv. 450]"
+			NameQuest = "SkyExp1Quest"
+			LevelQuest = 1
+			NameCheckQuest = "God's Guards"
+			CFrameMon = CFrame.new(-4698, 845, -1912)
+			CFrameQuestLevel = CFrame.new(-4722, 845, -1954)
+		elseif (MyLevel == 475 or MyLevel <= 524) or (_G.SelectMob == "Shanda [Lv. 475]") then
+			Monster = "Shanda [Lv. 475]"
+			NameQuest = "SkyExp1Quest"
+			LevelQuest = 2
+			NameCheckQuest = "Shandas"
+			CFrameMon = CFrame.new(-7685, 5567, -502)
+			CFrameQuestLevel = CFrame.new(-7862, 5546, -380)
+		elseif (MyLevel == 525 or MyLevel <= 549) or (_G.SelectMob == "Royal Squad [Lv. 525]") then
+			Monster = "Royal Squad [Lv. 525]"
+			NameQuest = "SkyExp2Quest"
+			LevelQuest = 1
+			NameCheckQuest = "Royal Squad"
+			CFrameMon = CFrame.new(-7670, 5607, -1460)
+			CFrameQuestLevel = CFrame.new(-7904, 5636, -1412)
+		elseif (MyLevel == 550 or MyLevel <= 624) or (_G.SelectMob == "Royal Soldier [Lv. 550]") then
+			Monster = "Royal Soldier [Lv. 550]"
+			NameQuest = "SkyExp2Quest"
+			LevelQuest = 2
+			NameCheckQuest = "Royal Soldier"
+			CFrameMon = CFrame.new(-7828, 5607, -1744)
+			CFrameQuestLevel = CFrame.new(-7904, 5636, -1412)
+		elseif (MyLevel == 625 or MyLevel <= 649) or (_G.SelectMob == "Galley Pirate [Lv. 625]") then
+			Monster = "Galley Pirate [Lv. 625]"
+			NameQuest = "FountainQuest"
+			LevelQuest = 1
+			NameCheckQuest = "Galley Pirate"
+			CFrameMon = CFrame.new(5589, 45, 3996)
+			CFrameQuestLevel = CFrame.new(5256, 39, 4050)
+		elseif (MyLevel >= 650) or (_G.SelectMob == "Galley Captain [Lv. 650]") then
+			Monster = "Galley Captain [Lv. 650]"
+			NameQuest = "FountainQuest"
+			LevelQuest = 2
+			NameCheckQuest = "Galley Captain"
+			CFrameMon = CFrame.new(5649, 39, 4936)
+			CFrameQuestLevel = CFrame.new(5256, 39, 4050)
+		end
+	end
+end
+
 spawn(function()
     while wait() do
-        --pcall(function()
-            if _G.FarmLevel then
+        if _G.FarmLevel then
+            pcall(function()
                 CheckLevelQuest()
                 if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameCheckQuest) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
@@ -1090,7 +1279,7 @@ spawn(function()
                         UnEquipWeapon(_G.SelectWeapon)
                     end
                 end
-            end
-        --end)
+            end)
+        end
     end
 end)
