@@ -1,3 +1,5 @@
+--= [ Anti Ban & Anti Afk ] =--
+
 local function TeleportToServer(JobId)
     local Succ, Err = pcall(function()
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, JobId, game.Players.LocalPlayer)
@@ -6,7 +8,7 @@ local function TeleportToServer(JobId)
 end
 
 local CheckAdmin = {"rip_indra","wenlocktoad","toilamvidamme","Uzoth","Azarth","Hingoi","Axiore","Death_King","Polkster","Lunoven","TheGreateAced","rip_fud","drip_mama","oofficialnoobie","Daigrock","layandikit12","red_game43","arlthmetic",}
-task.spawn(function()
+spawn(function()
     while wait() do
         for _, User in ipairs(game.Players:GetPlayers()) do
             if table.find(CheckAdmin, User.Name) then
@@ -22,6 +24,47 @@ end)
 for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do 
 	v:Disable()
 end
+
+spawn(function()
+    while task.wait() do
+		local L_225_ = {
+			["AbuseReportScreenshotPercentage"] = "0",
+			["AbuseReportScreenshot"] = "False",
+			["DFFlagAbuseReportScreenshot"] = "False",
+			["CrashPadUploadToBacktraceToBacktraceBaseUrl"] = "",
+			["CrashUploadToBacktracePercentage"] = "0",
+			["CrashUploadToBacktraceBlackholeToken"] = "",
+			["CrashUploadToBacktraceWindowsPlayerToken"] = ""
+		}
+		local function L_226_func(L_227_arg0)
+			L_227_arg0 = L_227_arg0:gsub("^DFInt", "")
+			L_227_arg0 = L_227_arg0:gsub("^DFFlag", "")
+			L_227_arg0 = L_227_arg0:gsub("FString", "")
+			L_227_arg0 = L_227_arg0:gsub("FLog", "")
+			L_227_arg0 = L_227_arg0:gsub("^FFlag", "")
+			L_227_arg0 = L_227_arg0:gsub("^DFint", "")
+			L_227_arg0 = L_227_arg0:gsub("^FInt", "")
+			return L_227_arg0
+		end
+		if setfflag then
+			task.spawn(function()
+				local L_228_ = os.clock()
+				for L_229_forvar0, L_230_forvar1 in next, L_225_ do
+					pcall(function()
+						if getfflag(L_226_func(L_229_forvar0)) then
+							setfflag(L_226_func(L_229_forvar0), L_230_forvar1)
+						elseif getfflag(L_229_forvar0) then
+							setfflag(L_229_forvar0, L_230_forvar1)
+						end
+					end)
+				end
+				print("Manazure Debug: Anti Ban Loaded In: " .. os.clock() - L_228_)
+			end)
+		else
+			print("Manazure Debug: Anti Ban Not Support This Executor!")
+		end
+	end
+end)
 
 --= [ Check World & Not Support Game ] =--
 
@@ -230,7 +273,7 @@ WindUI:SetNotificationLower(true)
 local Window = WindUI:CreateWindow({
     Title = "Manazure Hub - Blox Fruits",
     Icon = "tree-palm",
-    Author = "Developer by ObieVN",
+    Author = "Developer by ObieVN - discord.gg/manazurehub",
     Folder = "Manazure Hub",
     Size = UDim2.fromOffset(550, 350),
     Transparent = true,
@@ -310,50 +353,77 @@ Setting:Toggle({
     end
 })
 
-local targets = {}
-local targetName = nil
-
-function Attack(target)
-    if target[1]:FindFirstChild("HumanoidRootPart") and target[2]:FindFirstChild("HumanoidRootPart") and target[3]:FindFirstChild("HumanoidRootPart") and target[4]:FindFirstChild("HumanoidRootPart") then
-        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack"):FireServer(0)        
-        local args = {
-            [1] = target[1]:WaitForChild("Head"),
-            [2] = {
-                [1] = {
-                    [1] = target[2],
-                    [2] = target[2]:WaitForChild("HumanoidRootPart")
-                    },
-                [2] = {
-                    [1] = target[3],
-                    [2] = target[3]:WaitForChild("HumanoidRootPart")
-                    },
-                }
-            }
-        game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit"):FireServer(unpack(args))
+function AttackNoCoolDown()
+    local character = game.Players.LocalPlayer.Character
+    if not character then return end
+    local equippedWeapon = nil
+    for _, item in ipairs(character:GetChildren()) do
+        if item:IsA("Tool") then
+            equippedWeapon = item
+            break
+        end
+    end
+    if not equippedWeapon then return end
+    local function IsEntityAlive(entity)
+        return entity and entity:FindFirstChild("Humanoid") and entity.Humanoid.Health > 0
+    end
+    local function GetEnemiesInRange(range)
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        local targets = {}
+        local playerPos = character:GetPivot().Position
+        for _, enemy in ipairs(enemies) do
+            local primaryPart = enemy:FindFirstChild("HumanoidRootPart")
+            if primaryPart and IsEntityAlive(enemy) and (primaryPart.Position - playerPos).Magnitude <= range then
+                table.insert(targets, enemy)
+            end
+        end
+        return targets
+    end
+    if equippedWeapon:FindFirstChild("LeftClickRemote") then
+        local attackCount = 1  
+        local enemiesInRange = GetEnemiesInRange(60)
+        for _, enemy in ipairs(enemiesInRange) do
+            local direction = (enemy.HumanoidRootPart.Position - character:GetPivot().Position).Unit
+            pcall(function()
+                equippedWeapon.LeftClickRemote:FireServer(direction, attackCount)
+            end)
+            attackCount = attackCount + 1
+            if attackCount > 1000000000 then attackCount = 1 end
+        end
+    else
+        local targets = {}
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        local playerPos = character:GetPivot().Position
+        local mainTarget = nil
+        for _, enemy in ipairs(enemies) do
+            if not enemy:GetAttribute("IsBoat") and IsEntityAlive(enemy) then
+                local head = enemy:FindFirstChild("Head")
+                if head and (playerPos - head.Position).Magnitude <= 60 then
+                    table.insert(targets, { enemy, head })
+                    mainTarget = head
+                end
+            end
+        end
+        if not mainTarget then return end
+        pcall(function()
+            local storage = game:GetService("ReplicatedStorage")
+            local attackEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterAttack")
+            local hitEvent = storage:WaitForChild("Modules"):WaitForChild("Net"):WaitForChild("RE/RegisterHit")
+            if #targets > 0 then
+                attackEvent:FireServer(0.000000001)
+                hitEvent:FireServer(mainTarget, targets)
+            else
+                task.wait(0.000000001)
+            end
+        end)
     end
 end
 
 spawn(function()
     while task.wait() do
-        pcall(function()
-            if _G.FastAttack then
-                for i, v in pairs(workspace:FindFirstChild("Enemies"):GetChildren()) do
-                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude <= 60 then
-                            if targetName == nil or targetName == v.Name and FastAttackMon == v.Name then
-                                table.insert(targets, v)
-                                targetName = v.Name
-                            else
-                                targetName = FastAttackMon
-                            end
-                        end
-                    end
-                end
-                Attack(targets)
-                targets = {}
-                targetName = nil
-            end
-        end)
+        if _G.FastAttack then
+            AttackNoCoolDown()
+        end
     end
 end)
 
@@ -801,8 +871,8 @@ Status:Section({
     TextXAlignment = "Center"
 })
 
-Status:Input({
-    Title = "Input Job Id",
+local JobID = Status:Input({
+    Title = "Input Job-Id",
     Default = "",
     Placeholder = "Enter Job Id Here",
     Callback = function(V)
@@ -811,15 +881,22 @@ Status:Input({
 })
 
 Status:Button({
-   Title = "Join Job Id Server ",
+   Title = "Clear Job-Id",
     -- Desc = "",
    Callback = function()
-        game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId, _G.JobId, game.Players.LocalPlayer)
+        local JobID = Status:Input({
+            Title = "Input Job-Id",
+            Default = "",
+            Placeholder = "Enter Job Id Here",
+            Callback = function(V)
+                _G.JobId = V
+        end
+    })
    end
 })
 
 Status:Toggle({
-    Title = "Spam Join Job Id Server",
+    Title = "Spam Join Job-Id Server",
     -- Desc = "",
     Value = false,
     Callback = function(V)
@@ -834,6 +911,22 @@ spawn(function()
 		end
 	end
 end)
+
+Status:Button({
+   Title = "Join Job-Id Server",
+    -- Desc = "",
+   Callback = function()
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId, _G.JobId, game.Players.LocalPlayer)
+   end
+})
+
+Status:Button({
+   Title = "Rejoin Server ",
+    -- Desc = "",
+   Callback = function()
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+   end
+})
 
 Status:Button({
    Title = "Copy Job Id Server",
