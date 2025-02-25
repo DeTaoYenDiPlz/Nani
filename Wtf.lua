@@ -744,9 +744,14 @@ function FpsBooster()
     end
 end
 
+Setting:Section({ 
+    Title = "~ Other ~",
+    TextXAlignment = "Center"
+})
+
 Setting:Slider({
     Title = "Time Hop Server",
-     Desc = "A",
+    -- Desc = "",
     Value = {
         Min = 1,
         Max = 30,
@@ -1006,8 +1011,8 @@ function Hop()
         end
     end
     local v14 = require(game:GetService("ReplicatedStorage").Notification)
-    v14.new("<Color=Red>Manazure Hub: Wait " .. _G.DelayHopServer .. "s Hop Server<Color=/>"):Display()
-    while wait(_G.DelayHopServer or 3) do
+    v14.new("<Color=Red>Manazure Hub: Wait " .. tostring(_G.DelayHopServer) .. "s Hop Server<Color=/>"):Display()
+    while wait(_G.DelayHopServer) do
         v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
         Teleport()
     end
