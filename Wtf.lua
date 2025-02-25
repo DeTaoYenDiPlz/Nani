@@ -1059,7 +1059,7 @@ Farming:Toggle({
 
 spawn(function()
     while wait() do
-        pcall(function()
+        --pcall(function()
             if _G.FarmLevel then
                 CheckLevelQuest()
                 if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameCheckQuest) and _G.LevelMode == "Get Quest" then
@@ -1091,6 +1091,6 @@ spawn(function()
                     end
                 end
             end
-        end)
+        --end)
     end
 end)
