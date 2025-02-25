@@ -58,10 +58,7 @@ spawn(function()
 						end
 					end)
 				end
-				print("Manazure Debug: Anti Ban Loaded In: " .. os.clock() - L_228_)
 			end)
-		else
-			print("Manazure Debug: Anti Ban Not Support This Executor!")
 		end
 	end
 end)
@@ -873,26 +870,12 @@ Status:Section({
 
 local JobID = Status:Input({
     Title = "Input Job-Id",
+    -- Desc = "",
     Default = "",
     Placeholder = "Enter Job Id Here",
     Callback = function(V)
         _G.JobId = V
     end
-})
-
-Status:Button({
-   Title = "Clear Job-Id",
-    -- Desc = "",
-   Callback = function()
-        local JobID = Status:Input({
-            Title = "Input Job-Id",
-            Default = "",
-            Placeholder = "Enter Job Id Here",
-            Callback = function(V)
-                _G.JobId = V
-        end
-    })
-   end
 })
 
 Status:Toggle({
@@ -921,7 +904,15 @@ Status:Button({
 })
 
 Status:Button({
-   Title = "Rejoin Server ",
+   Title = "Copy Job Id Server",
+    -- Desc = "",
+   Callback = function()
+        setclipboard(tostring(game.JobId))
+   end
+})
+
+Status:Button({
+   Title = "Rejoin Server",
     -- Desc = "",
    Callback = function()
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
@@ -929,9 +920,77 @@ Status:Button({
 })
 
 Status:Button({
-   Title = "Copy Job Id Server",
+   Title = "Hop Server",
     -- Desc = "",
    Callback = function()
-        setclipboard(tostring(game.JobId))
+        Hop()
    end
 })
+
+function Hop()
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    local Deleted = false
+    function TPReturner()
+        local Site;
+        if foundAnything == "" then
+            Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+        else
+            Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+        end        
+        local ID = ""
+        if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+            foundAnything = Site.nextPageCursor
+        end        
+        local num = 0
+        for i,v in pairs(Site.data) do
+            local Possible = true
+            ID = tostring(v.id)            
+            if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                for _,Existing in pairs(AllIDs) do
+                    if num ~= 0 then
+                        if ID == tostring(Existing) then
+                            Possible = false
+                        end
+                    else
+                        if tonumber(actualHour) ~= tonumber(Existing) then
+                            local delFile = pcall(function()
+                                AllIDs = {}
+                                table.insert(AllIDs, actualHour)
+                            end)
+                        end
+                    end
+                    num = num + 1
+                end
+                if Possible == true then
+                    table.insert(AllIDs, ID)
+                    wait(0.1)
+                    pcall(function()
+                        game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                    end)
+                    wait(1)
+                    break
+                end
+            end
+        end
+    end
+    function Teleport() 
+        while true do
+            pcall(function()
+                TPReturner()
+                if foundAnything ~= "" then
+                    TPReturner()
+                end
+            end)
+            wait(2)
+        end
+    end
+    local v14 = require(game:GetService("ReplicatedStorage").Notification)
+    v14.new("<Color=Red>Manazure Hub: Wait "..(tostring(_G.DelayHopServer) or "3").."s Hop Server<Color=/>"):Display()
+    while wait(_G.DelayHopServer or 3) do
+        v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
+        Teleport()
+    end
+end
