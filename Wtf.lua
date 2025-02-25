@@ -567,6 +567,7 @@ Setting:Section({
     TextXAlignment = "Center"
 })
 
+_G.TweenSpeed 350
 Setting:Slider({
     Title = "Tween Speed",
     -- Desc = "",
@@ -749,6 +750,7 @@ Setting:Section({
     TextXAlignment = "Center"
 })
 
+_G.DelayHopServer = 3
 Setting:Slider({
     Title = "Time Hop Server",
     -- Desc = "",
