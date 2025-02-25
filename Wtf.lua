@@ -577,7 +577,6 @@ Setting:Section({
     TextXAlignment = "Center"
 })
 
-_G.TweenSpeed 350
 Setting:Slider({
     Title = "Tween Speed",
     -- Desc = "",
@@ -1054,7 +1053,7 @@ Farming:Toggle({
     Value = false,
     Callback = function(V)
         _G.FarmLevel = V
-        -- StopTween(_G.FarmLevel)
+        StopTween(_G.FarmLevel)
     end
 })
 
