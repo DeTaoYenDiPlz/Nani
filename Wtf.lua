@@ -1053,7 +1053,7 @@ Farming:Toggle({
     Value = false,
     Callback = function(V)
         _G.FarmLevel = V
-        StopTween(_G.FarmLevel)
+        -- StopTween(_G.FarmLevel)
     end
 })
 
@@ -1101,14 +1101,14 @@ Farming:Toggle({
     Value = false,
     Callback = function(V)
         _G.FarmNearest = V
-        StopTween(_G.FarmNearest)
+        -- StopTween(_G.FarmNearest)
     end
 })
 
 spawn(function()
 	while wait() do
-	    pcall(function()
-	    	if _G.FarmNearest then
+	    if _G.FarmNearest then
+	    	pcall(function()
 				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
          	       if v.Name and v:FindFirstChild("Humanoid") then
 				        if v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500 then
@@ -1122,7 +1122,7 @@ spawn(function()
 				        end
 				    end
 				end
-			end
-		end)
+			end)
+		end
 	end
 end)
