@@ -468,7 +468,7 @@ Setting:Dropdown({
 Setting:Toggle({
     Title = "Bring Mob",
     -- Desc = "",
-    Value = false,
+    Value = true,
     Callback = function(V)
         _G.BringMob = V
     end
@@ -574,7 +574,7 @@ Setting:Slider({
     Value = {
         Min = 150,
         Max = 400,
-        Default = 350,
+        Default = 350
     },
     Callback = function(V)
         _G.TweenSpeed = V
@@ -752,6 +752,7 @@ Setting:Section({
 Setting:Slider({
     Title = "Time Hop Server",
     -- Desc = "",
+    Step = 1,
     Value = {
         Min = 1,
         Max = 30,
