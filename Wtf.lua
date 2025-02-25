@@ -1062,18 +1062,18 @@ spawn(function()
     while wait() do
         pcall(function()
             if _G.FarmLevel then
-                CheckQuest()
+                CheckLevelQuest()
                 if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
                     StartMagnet = false
-	    			topos(CFrameQuest)
-		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuest.Position).Magnitude <= 10 then
+	    			topos(CFrameQuestLevel)
+		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 10 then
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
                 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
-                    CheckQuest()
+                    CheckLevelQuest()
                     if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
                         for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                             if (v.Name == Mon) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
