@@ -1011,7 +1011,7 @@ function Hop()
         end
     end
     local v14 = require(game:GetService("ReplicatedStorage").Notification)
-    v14.new("<Color=Red>Manazure Hub: Wait " .. tostring(_G.DelayHopServer) .. "s Hop Server<Color=/>"):Display()
+    v14.new("<Color=Red>Manazure Hub: Wait " .. (tostring(_G.DelayHopServer)) .. "s Hop Server<Color=/>"):Display()
     while wait(_G.DelayHopServer) do
         v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
         Teleport()
