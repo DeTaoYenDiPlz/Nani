@@ -341,6 +341,16 @@ function EquipWeapon(Weapon)
     return a
 end
 
+function UnEquipWeapon(Weapon)
+    if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
+        _G.NotAutoEquip = true
+        wait(0.5)
+        game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
+        wait(0.1)
+        _G.NotAutoEquip = false
+    end
+end
+
 Setting:Toggle({
     Title = "Fast Attack",
     -- Desc = "",
@@ -1018,3 +1028,70 @@ function Hop()
     v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
     Teleport()
 end
+
+--= [ Farming ] =--
+
+Farming:Section({ 
+    Title = "~ Farm Level ~",
+    TextXAlignment = "Center"
+})
+
+Farming:Dropdown({
+    Title = "Select Farm Level Mode",
+    -- Desc = "",
+    Multi = false,
+    Value = "Get Quest",
+    AllowNone = false,
+    Values = {"No Quest","Get Quest"},
+    Callback = function(V)
+        _G.LevelMode = V
+    end
+})
+
+Status:Toggle({
+    Title = "Farm Level",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.FarmLevel = V
+        StopTween(_G.FarmLevel)
+    end
+})
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.FarmLevel then
+                CheckQuest()
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) and _G.LevelMode == "Get Quest" then
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                end
+                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
+                    StartMagnet = false
+	    			topos(CFrameQuest)
+		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuest.Position).Magnitude <= 10 then
+	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
+                    end
+                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
+                    CheckQuest()
+                    if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if (v.Name == Mon) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                repeat wait()
+                                    EquipWeapon(_G.SelectWeapon)
+                                    topos(v.HumanoidRootPart.CFrame * Pos)
+                                    PosFarm = v.HumanoidRootPart.CFrame
+                                    StartMagnet = true
+                                until not _G.FarmLevel or not v.Parent or v.Humanoid.Health <= 0
+                            end
+                        end
+                    else
+                        StartMagnet = false
+                        topos(CFrameMon)
+                        UnEquipWeapon(_G.SelectWeapon)
+                    end
+                end
+            end
+        end)
+    end
+end)
