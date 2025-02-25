@@ -433,17 +433,13 @@ Setting:Toggle({
     end
 })
 
-function AutoClick()
-	game:GetService("VirtualUser"):CaptureController()
-	game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-end
-
 spawn(function()
-    while task.wait() do
-        if _G.AutoClick then
-            AutoClick()
-        end
-    end
+	while wait() do
+		if _G.AutoClick then
+			game:GetService("VirtualUser"):CaptureController()
+			game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 1, 0, 1))
+		end
+	end
 end)
 
 Setting:Dropdown({
@@ -466,6 +462,15 @@ Setting:Dropdown({
         elseif _G.RangeBring == "Really Far [ 350m ]" then
             BringRange = 350
         end
+    end
+})
+
+Setting:Toggle({
+    Title = "Bring Mob",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.BringMob = V
     end
 })
 
@@ -739,6 +744,19 @@ function FpsBooster()
     end
 end
 
+Setting:Slider({
+    Title = "Time Hop Server",
+     Desc = "A",
+    Value = {
+        Min = 1,
+        Max = 30,
+        Default = 3
+    },
+    Callback = function(V)
+        _G.DelayHopServer = V
+    end
+})
+
 Setting:Toggle({
     Title = "Auto Rejoin When Disconnect",
     -- Desc = "",
@@ -870,7 +888,7 @@ Status:Section({
 
 local JobID = Status:Input({
     Title = "Input Job-Id",
-    Desc = "A",
+    -- Desc = "",
     Default = "",
     Placeholder = "Enter Job Id Here",
     Callback = function(V)
@@ -988,7 +1006,7 @@ function Hop()
         end
     end
     local v14 = require(game:GetService("ReplicatedStorage").Notification)
-    v14.new("<Color=Red>Manazure Hub: Wait " .. _G.DelayHopServer or "3" .. "s Hop Server<Color=/>"):Display()
+    v14.new("<Color=Red>Manazure Hub: Wait " .. _G.DelayHopServer .. "s Hop Server<Color=/>"):Display()
     while wait(_G.DelayHopServer or 3) do
         v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
         Teleport()
