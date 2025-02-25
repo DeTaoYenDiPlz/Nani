@@ -870,7 +870,7 @@ Status:Section({
 
 local JobID = Status:Input({
     Title = "Input Job-Id",
-    -- Desc = "",
+    Desc = "A",
     Default = "",
     Placeholder = "Enter Job Id Here",
     Callback = function(V)
@@ -904,7 +904,7 @@ Status:Button({
 })
 
 Status:Button({
-   Title = "Copy Job Id Server",
+   Title = "Copy Job-Id Server",
     -- Desc = "",
    Callback = function()
         setclipboard(tostring(game.JobId))
@@ -988,7 +988,7 @@ function Hop()
         end
     end
     local v14 = require(game:GetService("ReplicatedStorage").Notification)
-    v14.new("<Color=Red>Manazure Hub: Wait "..(tostring(_G.DelayHopServer) or 3).."s Hop Server<Color=/>"):Display()
+    v14.new("<Color=Red>Manazure Hub: Wait " .. _G.DelayHopServer or "3" .. "s Hop Server<Color=/>"):Display()
     while wait(_G.DelayHopServer or 3) do
         v14.new("<Color=Red>Manazure Hub: Hop Server<Color=/>"):Display()
         Teleport()
