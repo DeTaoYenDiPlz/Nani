@@ -1064,7 +1064,7 @@ Farming:Toggle({
 spawn(function()
     while wait() do
         if _G.FarmLevel then
-            pcall(function()
+            --pcall(function()
                 CheckLevelQuest()
                 if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMonster) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
@@ -1093,7 +1093,7 @@ spawn(function()
                         UnEquipWeapon(_G.SelectWeapon)
                     end
                 end
-            end)
+            --end)
         end
     end
 end)
