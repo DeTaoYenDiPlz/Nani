@@ -326,28 +326,31 @@ Setting:Dropdown({
     end
 })
 
+local lastUnEquipTime = 0
+local unEquipCooldown = 0.5
 function UnEquipWeapon(Weapon)
     local currentTime = tick()
-    if currentTime - 0 >= 0.5 then
+    if currentTime - lastUnEquipTime >= unEquipCooldown then
         if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
-            NotAutoEquip = true
+            getgenv().NotAutoEquip = true
             game.Players.LocalPlayer.Character[Weapon].Parent = game.Players.LocalPlayer.Backpack
-            NotAutoEquip = false
+            getgenv().NotAutoEquip = false
         end
-        0 = currentTime
+        lastUnEquipTime = currentTime
     end
 end
-
+local lastEquipTime = 0
+local equipCooldown = 0.5
 function EquipWeapon(ToolSe)
     local currentTime = tick()
-    if currentTime - 0 >= 0.5 then        
-        if not NotAutoEquip then
+    if currentTime - lastEquipTime >= equipCooldown then        
+        if not getgenv().NotAutoEquip then
             local tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
             if tool then
                 game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
             end
         end
-        0 = currentTime
+        lastEquipTime = currentTime
     end
 end
 
