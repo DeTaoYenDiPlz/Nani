@@ -1124,7 +1124,7 @@ Farming:Section({
     TextXAlignment = "Center"
 })
 
-if FistSea then
+if FirstSea then
 	MobList = {"Bandit","Monkey","Gorilla","Pirate","Brute","Desert Bandit","Desert Officer","Snow Bandit","Snowman","Chief Petty Officer","Sky Bandit","Dark Master","Toga Warrior","Gladiator","Military Soldier","Military Spy","Fishman Warrior","Fishman Commando","God's Guard","Shanda","Royal Squad","Royal Soldier","Galley Pirate","Galley Captain"}
 elseif SecondSea then
 	MobList = {"Raider","Mercenary","Swan Pirate","Factory Staff","Marine Lieutenant","Marine Captain","Zombie","Vampire","Snow Trooper","Winter Warrior","Lab Subordinate","Horned Warrior","Magma Ninja","Lava Pirate","Ship Deckhand","Ship Engineer","Ship Steward","Ship Officer","Arctic Warrior","Snow Lurker","Sea Soldier","Water Fighter"}
@@ -1137,7 +1137,7 @@ Farming:Dropdown({
     -- Desc = "",
     Multi = false,
     Value = "",
-    AllowNone = false,
+    AllowNone = true,
     Values = MobList,
     Callback = function(V)
         _G.SelectMob = V
