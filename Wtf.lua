@@ -1065,6 +1065,7 @@ spawn(function()
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
                 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
+                    CheckLevelQuest()
                     if game:GetService("Workspace").Enemies:FindFirstChild(NameMonster) then
                         for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                             if (v.Name == NameMonster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
@@ -1159,9 +1160,9 @@ spawn(function()
         if _G.FarmMob then
             pcall(function()
                 CheckLevelQuest()
-                if game:GetService("Workspace").Enemies:FindFirstChild(NameMonster) then
+                if game:GetService("Workspace").Enemies:FindFirstChild(_G.SelectMob) then
                     for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
-                        if (v.Name == NameMonster) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        if (v.Name == _G.SelectMob) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                             repeat wait()
                                 EquipWeapon(_G.SelectWeapon)
                                 topos(v.HumanoidRootPart.CFrame * PosFarm)
