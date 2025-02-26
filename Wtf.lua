@@ -1118,3 +1118,64 @@ spawn(function()
 		end
 	end
 end)
+
+Farming:Section({ 
+    Title = "~ Farm Mob ~",
+    TextXAlignment = "Center"
+})
+
+if FistSea then
+	MobList = {"Bandit","Monkey","Gorilla","Pirate","Brute","Desert Bandit","Desert Officer","Snow Bandit","Snowman","Chief Petty Officer","Sky Bandit","Dark Master","Toga Warrior","Gladiator","Military Soldier","Military Spy","Fishman Warrior","Fishman Commando","God's Guard","Shanda","Royal Squad","Royal Soldier","Galley Pirate","Galley Captain"}
+elseif SecondSea then
+	MobList = {"Raider","Mercenary","Swan Pirate","Factory Staff","Marine Lieutenant","Marine Captain","Zombie","Vampire","Snow Trooper","Winter Warrior","Lab Subordinate","Horned Warrior","Magma Ninja","Lava Pirate","Ship Deckhand","Ship Engineer","Ship Steward","Ship Officer","Arctic Warrior","Snow Lurker","Sea Soldier","Water Fighter"}
+elseif ThirdSea then
+	MobList = {"Pirate Millionaire","Dragon Crew Warrior","Dragon Crew Archer","Female Islander","Giant Islander","Marine Commodore","Marine Rear Admiral","Fishman Raider","Fishman Captain","Forest Pirate","Mythological Pirate","Jungle Pirate","Musketeer Pirate","Reborn Skeleton","Living Zombie","Demonic Soul","Posessed Mummy","Peanut Scout","Peanut President","Ice Cream Chef","Ice Cream Commander","Cookie Crafter","Cake Guard","Baking Staff","Head Baker","Cocoa Warrior","Chocolate Bar Battler","Sweet Thief","Candy Rebel","Candy Pirate","Snow Demon","Isle Outlaw","Island Boy","Sun-kissed Warrior","Isle Champion","Serpent Hunter","Skull Slayer"}
+end
+
+Farming:Dropdown({
+    Title = "Select Mob",
+    -- Desc = "",
+    Multi = false,
+    Value = "",
+    AllowNone = false,
+    Values = MobList,
+    Callback = function(V)
+        _G.SelectMob = V
+    end
+})
+
+Farming:Toggle({
+    Title = "Auto Farm Mob",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.FarmMob = V
+        StopTween(_G.FarmMob)
+    end
+})
+
+spawn(function()
+    while wait() do
+        if _G.FarmMob then
+            pcall(function()
+                CheckLevelQuest()
+                if game:GetService("Workspace").Enemies:FindFirstChild(NameMonster) then
+                    for i,v in pairs (game.Workspace.Enemies:GetChildren()) do
+                        if (v.Name == NameMonster) and v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                            repeat wait()
+                                EquipWeapon(_G.SelectWeapon)
+                                topos(v.HumanoidRootPart.CFrame * PosFarm)
+                                PosMonFarm = v.HumanoidRootPart.CFrame
+                                SelectMag = true
+                            until not _G.FarmMob or not v.Parent or v.Humanoid.Health <= 0
+                        end
+                    end
+                else
+                    SelectMag = false
+                    topos(CFrameMon)
+                    UnEquipWeapon(_G.SelectWeapon)
+                end
+            end)
+        end
+    end
+end)
