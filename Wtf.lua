@@ -1069,7 +1069,7 @@ spawn(function()
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
                     StartMagnet = false
 	    			topos(CFrameQuestLevel)
-		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 10 then
+		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 5 then
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
                 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
@@ -1079,7 +1079,7 @@ spawn(function()
                             if (v.Name == NameCheckQuest) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
                                     EquipWeapon(_G.SelectWeapon)
-                                    topos(v.HumanoidRootPart.CFrame * Pos)
+                                    topos(v.HumanoidRootPart.CFrame * PosFarm)
                                     PosFarm = v.HumanoidRootPart.CFrame
                                     StartMagnet = true
                                 until not _G.FarmLevel or not v.Parent or v.Humanoid.Health <= 0
@@ -1115,7 +1115,7 @@ spawn(function()
 				        if v.Humanoid.Health > 0 and (v.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 1500 then
 			 	           repeat wait()
 			     	           EquipWeapon(_G.SelectWeapon)
-			  	              topos(v.HumanoidRootPart.CFrame * Pos)
+			  	              topos(v.HumanoidRootPart.CFrame * PosFarm)
 			 	               PosNear = v.HumanoidRootPart.CFrame
 					        	MagnetNear = true
 				            until not _G.FarmNearest or not v.Parent or v.Humanoid.Health <= 0
