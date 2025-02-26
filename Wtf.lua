@@ -326,28 +326,28 @@ Setting:Dropdown({
     end
 })
 
-function EquipWeapon(Weapon)
-    local a 
-    for i,v in next, game.Players.LocalPlayer.Backpack:GetChildren() do
-        if v:IsA("Tool") and v.ToolTip == Weapon then
-            a = v.Name
+function UnEquipWeapon(Weapon)
+    local currentTime = tick()
+    if currentTime - 0 >= 0.5 then
+        if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
+            getgenv().NotAutoEquip = true
+            game.Players.LocalPlayer.Character[Weapon].Parent = game.Players.LocalPlayer.Backpack
+            getgenv().NotAutoEquip = false
         end
+        0 = currentTime
     end
-    for i,v in next, game.Players.LocalPlayer.Character:GetChildren() do
-        if v:IsA("Tool") and v.ToolTip == Weapon then
-            a = v.Name
-        end
-    end
-    return a
 end
 
-function UnEquipWeapon(Weapon)
-    if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
-        _G.NotAutoEquip = true
-        wait(0.5)
-        game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
-        wait(0.1)
-        _G.NotAutoEquip = false
+function EquipWeapon(ToolSe)
+    local currentTime = tick()
+    if currentTime - 0 >= 0.5 then        
+        if not getgenv().NotAutoEquip then
+            local tool = game.Players.LocalPlayer.Backpack:FindFirstChild(ToolSe)
+            if tool then
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+            end
+        end
+        0 = currentTime
     end
 end
 
