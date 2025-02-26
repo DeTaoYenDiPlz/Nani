@@ -1035,6 +1035,7 @@ Farming:Section({
     TextXAlignment = "Center"
 })
 
+_G.LevelMode = "Get Quest"
 Farming:Dropdown({
     Title = "Select Farm Level Mode",
     -- Desc = "",
@@ -1053,7 +1054,7 @@ Farming:Toggle({
     Value = false,
     Callback = function(V)
         _G.FarmLevel = V
-        -- StopTween(_G.FarmLevel)
+        StopTween(_G.FarmLevel)
     end
 })
 
@@ -1062,7 +1063,7 @@ spawn(function()
         if _G.FarmLevel then
             pcall(function()
                 CheckLevelQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameCheckQuest) and _G.LevelMode == "Get Quest" then
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, Monster) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
@@ -1075,7 +1076,7 @@ spawn(function()
                     CheckLevelQuest()
                     if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
                         for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if (v.Name == Mon) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            if (v.Name == Monster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
                                     EquipWeapon(_G.SelectWeapon)
                                     topos(v.HumanoidRootPart.CFrame * Pos)
@@ -1101,7 +1102,7 @@ Farming:Toggle({
     Value = false,
     Callback = function(V)
         _G.FarmNearest = V
-        -- StopTween(_G.FarmNearest)
+        StopTween(_G.FarmNearest)
     end
 })
 
