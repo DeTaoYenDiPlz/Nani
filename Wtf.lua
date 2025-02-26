@@ -1055,7 +1055,7 @@ spawn(function()
         if _G.FarmLevel then
             --pcall(function()
                 CheckLevelQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMonster) and _G.LevelMode == "Get Quest" then
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMobQuest) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
@@ -1066,9 +1066,9 @@ spawn(function()
                     end
                 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
                     CheckLevelQuest()
-                    if game:GetService("Workspace").Enemies:FindFirstChild(NameMonster) then
+                    if game:GetService("Workspace").Enemies:FindFirstChild(Monster) then
                         for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if (v.Name == NameMonster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            if (v.Name == Monster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
                                     EquipWeapon(_G.SelectWeapon)
                                     topos(v.HumanoidRootPart.CFrame * PosFarm)
