@@ -326,21 +326,24 @@ Setting:Dropdown({
     end
 })
 
-function UnEquipWeapon(Weapon)
-    if game.Players.LocalPlayer.Character:FindFirstChild(Weapon) then
-        _G.NotAutoEquip = true
-        wait(0.5)
-        game.Players.LocalPlayer.Character:FindFirstChild(Weapon).Parent = game.Players.LocalPlayer.Backpack
-        wait(0.1)
-        _G.NotAutoEquip = false
-    end
+function UnEquipWeapon(L_120_arg0)
+	if game.Players.LocalPlayer.Character:FindFirstChild(L_120_arg0) then
+		_25msShared.NotAutoEquip = true
+		wait(.5)
+		game.Players.LocalPlayer.Character:FindFirstChild(L_120_arg0).Parent = game.Players.LocalPlayer.Backpack;
+		wait(.1)
+		_25msShared.NotAutoEquip = false
+	end
 end
 
-function EquipWeapon(Weapon)
-    if game.Players.LocalPlayer.Backpack:FindFirstChild(Weapon) then
-        local Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(Weapon)
-        game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
-    end
+function EquipWeapon(L_121_arg0)
+	if not _25msShared.NotAutoEquip then
+		if game.Players.LocalPlayer.Backpack:FindFirstChild(L_121_arg0) then
+			Tool = game.Players.LocalPlayer.Backpack:FindFirstChild(L_121_arg0)
+			wait(.1)
+			game.Players.LocalPlayer.Character.Humanoid:EquipTool(Tool)
+		end
+	end
 end
 
 Setting:Toggle({
