@@ -107,7 +107,7 @@ end)
 spawn(function()
     game:GetService("RunService").Stepped:Connect(function()
         pcall(function()
-            if _G.FarmLevel then
+            if _G.NoClip then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
                     local NoClip = Instance.new("BodyVelocity")
                     NoClip.Name = "BodyVelocity"
@@ -204,6 +204,7 @@ function topos(Pos)
         game.Players.LocalPlayer.Character.Humanoid:ChangeState(15)
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	end
+    _G.NoClip = true
 	if Distance <= 300 then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	else
@@ -214,9 +215,8 @@ end
 function StopTween(Pos)
 	if not Pos then
 		topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-		if game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-			game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
-		end
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
+		_G.NoClip = false
 	end
 end
 
