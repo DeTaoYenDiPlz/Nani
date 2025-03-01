@@ -171,7 +171,6 @@ function topos(Pos)
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	end
 	Tween:Play()
-	end
 end
 
 function StopTween(Pos)
