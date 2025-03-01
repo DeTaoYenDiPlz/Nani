@@ -309,6 +309,7 @@ Setting:Section({
     TextXAlignment = "Center"
 })
 
+_G.SelectWeapon = "Melee"
 Setting:Dropdown({
     Title = "Select Weapon",
     -- Desc = "",
@@ -1065,8 +1066,8 @@ spawn(function()
                 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
                     CheckLevelQuest()
                     if game:GetService("Workspace").Enemies:FindFirstChild(Monster) then
-                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if (v.Name == Monster) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                        for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if v.Name == Monster and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
                                     EquipWeapon(_G.SelectWeapon)
                                     topos(v.HumanoidRootPart.CFrame * PosFarm)
