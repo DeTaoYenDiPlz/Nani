@@ -1045,20 +1045,19 @@ spawn(function()
         if _G.FarmLevel then
             --pcall(function()
                 CheckLevelQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMobQuest) and _G.LevelMode == "Get Quest" then
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMob) then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
-                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
+                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
                     StartMagnet = false
 	    			topos(CFrameQuestLevel)
 		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 5 then
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
-                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
-                    CheckLevelQuest()
-                    if game:GetService("Workspace").Enemies:FindFirstChild(Monster) then
+                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+                    if game:GetService("Workspace").Enemies:FindFirstChild(NameMob) then
                         for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                            if v.Name == Monster and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                            if (v.Name == NameMob) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
                                     EquipWeapon(_G.SelectWeapon)
                                     topos(v.HumanoidRootPart.CFrame * PosFarm)
