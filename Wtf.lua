@@ -205,7 +205,7 @@ function topos(Pos)
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	end
     _G.NoClip = true
-	if Distance <= 300 then
+	if Distance <= 250 then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	else
     	Tween:Play()
@@ -215,7 +215,6 @@ end
 function StopTween(Pos)
 	if not Pos then
 		topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 		_G.NoClip = false
 	end
 end
@@ -443,6 +442,7 @@ spawn(function()
 	end
 end)
 
+BringRange = 300
 Setting:Dropdown({
     Title = "Select Range Bring Mob",
     -- Desc = "",
@@ -579,15 +579,6 @@ Setting:Slider({
     },
     Callback = function(V)
         _G.TweenSpeed = V
-    end
-})
-
-Setting:Toggle({
-    Title = "Portal Teleport",
-    -- Desc = "",
-    Value = true,
-    Callback = function(V)
-        _G.PortalTeleport = V
     end
 })
 
