@@ -205,10 +205,10 @@ function topos(Pos)
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	end
     _G.NoClip = true
-	if Distance <= 250 then
+	if Distance <= 300 then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
-	else
-    	Tween:Play()
+	end
+	Tween:Play()
 	end
 end
 
@@ -1045,16 +1045,16 @@ spawn(function()
         if _G.FarmLevel then
             --pcall(function()
                 CheckLevelQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMob) then
+                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMob) and _G.LevelMode == "Get Quest" then
                     game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
                 end
-                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
+                if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
                     StartMagnet = false
 	    			topos(CFrameQuestLevel)
 		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 5 then
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
-                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+                elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true or _G.LevelMode == "No Quest" then
                     if game:GetService("Workspace").Enemies:FindFirstChild(NameMob) then
                         for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                             if (v.Name == NameMob) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
