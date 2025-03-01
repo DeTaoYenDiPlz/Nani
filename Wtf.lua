@@ -25,44 +25,6 @@ for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) d
 	v:Disable()
 end
 
-spawn(function()
-    while task.wait() do
-		local L_225_ = {
-			["AbuseReportScreenshotPercentage"] = "0",
-			["AbuseReportScreenshot"] = "False",
-			["DFFlagAbuseReportScreenshot"] = "False",
-			["CrashPadUploadToBacktraceToBacktraceBaseUrl"] = "",
-			["CrashUploadToBacktracePercentage"] = "0",
-			["CrashUploadToBacktraceBlackholeToken"] = "",
-			["CrashUploadToBacktraceWindowsPlayerToken"] = ""
-		}
-		local function L_226_func(L_227_arg0)
-			L_227_arg0 = L_227_arg0:gsub("^DFInt", "")
-			L_227_arg0 = L_227_arg0:gsub("^DFFlag", "")
-			L_227_arg0 = L_227_arg0:gsub("FString", "")
-			L_227_arg0 = L_227_arg0:gsub("FLog", "")
-			L_227_arg0 = L_227_arg0:gsub("^FFlag", "")
-			L_227_arg0 = L_227_arg0:gsub("^DFint", "")
-			L_227_arg0 = L_227_arg0:gsub("^FInt", "")
-			return L_227_arg0
-		end
-		if setfflag then
-			task.spawn(function()
-				local L_228_ = os.clock()
-				for L_229_forvar0, L_230_forvar1 in next, L_225_ do
-					pcall(function()
-						if getfflag(L_226_func(L_229_forvar0)) then
-							setfflag(L_226_func(L_229_forvar0), L_230_forvar1)
-						elseif getfflag(L_229_forvar0) then
-							setfflag(L_229_forvar0, L_230_forvar1)
-						end
-					end)
-				end
-			end)
-		end
-	end
-end)
-
 --= [ Check World & Not Support Game ] =--
 
 if game.PlaceId == 2753915549 then
