@@ -25,6 +25,44 @@ for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) d
 	v:Disable()
 end
 
+spawn(function()
+    while task.wait() do
+		local L_225_ = {
+			["AbuseReportScreenshotPercentage"] = "0",
+			["AbuseReportScreenshot"] = "False",
+			["DFFlagAbuseReportScreenshot"] = "False",
+			["CrashPadUploadToBacktraceToBacktraceBaseUrl"] = "",
+			["CrashUploadToBacktracePercentage"] = "0",
+			["CrashUploadToBacktraceBlackholeToken"] = "",
+			["CrashUploadToBacktraceWindowsPlayerToken"] = ""
+		}
+		local function L_226_func(L_227_arg0)
+			L_227_arg0 = L_227_arg0:gsub("^DFInt", "")
+			L_227_arg0 = L_227_arg0:gsub("^DFFlag", "")
+			L_227_arg0 = L_227_arg0:gsub("FString", "")
+			L_227_arg0 = L_227_arg0:gsub("FLog", "")
+			L_227_arg0 = L_227_arg0:gsub("^FFlag", "")
+			L_227_arg0 = L_227_arg0:gsub("^DFint", "")
+			L_227_arg0 = L_227_arg0:gsub("^FInt", "")
+			return L_227_arg0
+		end
+		if setfflag then
+			task.spawn(function()
+				local L_228_ = os.clock()
+				for L_229_forvar0, L_230_forvar1 in next, L_225_ do
+					pcall(function()
+						if getfflag(L_226_func(L_229_forvar0)) then
+							setfflag(L_226_func(L_229_forvar0), L_230_forvar1)
+						elseif getfflag(L_229_forvar0) then
+							setfflag(L_229_forvar0, L_230_forvar1)
+						end
+					end)
+				end
+			end)
+		end
+	end
+end)
+
 --= [ Check World & Not Support Game ] =--
 
 if game.PlaceId == 2753915549 then
@@ -171,6 +209,52 @@ function topos(Pos)
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
 	end
 	Tween:Play()
+end
+
+function WaitHRP(q0) 
+    if not q0 then 
+        return 
+    end
+    return q0.Character:WaitForChild("HumanoidRootPart", 9) 
+end
+
+function Tween(Pos)
+    if game.Players.LocalPlayer.Character.Humanoid.Health > 0 and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+        if not Pos then 
+            return 
+        end
+        game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart", 9)
+        game.Players.LocalPlayer.Character:WaitForChild("Head", 9)
+        local Cac = game.Players.LocalPlayer.Character.HumanoidRootPart
+        if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Hold") then
+            local Hold = Instance.new("BodyVelocity", Cac)
+            Hold.Name = "Hold"
+            Hold.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            Hold.Velocity = Vector3.new(0, 0, 0)
+        else
+            Cac:FindFirstChild("Hold"):Destroy()
+        end
+        if not game.Players.LocalPlayer.Character:FindFirstChild("PartTele") then
+            local PartTele = Instance.new("Part", game.Players.LocalPlayer.Character) -- Create part
+            PartTele.Size = Vector3.new(10,1,10)
+            PartTele.Name = "PartTele"
+            PartTele.Anchored = true
+            PartTele.Transparency = 1
+            PartTele.CanCollide = false
+            PartTele.CFrame = WaitHRP(game.Players.LocalPlayer).CFrame 
+            PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
+                task.wait(0.01)
+                local Hrp = WaitHRP(game.Players.LocalPlayer)
+                if Hrp then
+                    Hrp.CFrame = PartTele.CFrame
+                end
+            end)
+        end
+        local Speed = _G.TweenSpeed or 350
+        TweenNe = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.PartTele, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),{CFrame = Pos})
+        TweenNe:Play()
+    end
 end
 
 function StopTween(Pos)
@@ -1020,8 +1104,7 @@ spawn(function()
                         for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
                             if (v.Name == NameMob) and v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
                                 repeat wait()
-                                    EquipWeapon(_G.SelectWeapon)
-                                    topos(v.HumanoidRootPart.CFrame * PosFarm)
+                                    Tween(v.HumanoidRootPart.CFrame * PosFarm)
                                     PosFarm = v.HumanoidRootPart.CFrame
                                     StartMagnet = true
                                 until not _G.FarmLevel or not v.Parent or v.Humanoid.Health <= 0
@@ -1029,8 +1112,7 @@ spawn(function()
                         end
                     else
                         StartMagnet = false
-                        topos(CFrameMon)
-                        UnEquipWeapon(_G.SelectWeapon)
+                        Tween(CFrameMon)
                     end
                 end
             --end)
