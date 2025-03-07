@@ -259,7 +259,7 @@ end
 
 function StopTween(Pos)
 	if not Pos then
-		topos(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+		Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
 		_G.NoClip = false
 	end
 end
@@ -1095,7 +1095,7 @@ spawn(function()
                 end
                 if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false and _G.LevelMode == "Get Quest" then
                     StartMagnet = false
-	    			topos(CFrameQuestLevel)
+	    			Tween(CFrameQuestLevel)
 		    		if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuestLevel.Position).Magnitude <= 5 then
 	    				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                     end
