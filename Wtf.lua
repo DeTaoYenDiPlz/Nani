@@ -225,7 +225,6 @@ function Tween(Pos)
             local Hold = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
             Hold.Name = "Hold"
             Hold.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-            Hold.Velocity = Vector3.new(0, 0, 0)
         else
             game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Hold"):Destroy()
         end
@@ -269,7 +268,10 @@ end)
 function StopTween(Pos)
 	if not Pos then
 	    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
+	    TweenNe = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.PartTele, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),{CFrame = Pos})
+	    TweenNe:Play()
 	    Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+	    Tween:Cancel()
 	end
 end
 
