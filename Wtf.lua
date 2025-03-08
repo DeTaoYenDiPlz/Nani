@@ -254,14 +254,14 @@ end
 
 function StopTween(Pos)
 	if not Pos then
-		if lp.Character:FindFirstChild("Humanoid").Health <= 0 or not lp.Character:FindFirstChild("HumanoidRootPart") then
-            if lp.Character:FindFirstChild("PartTele") then
-                lp.Character:FindFirstChild("PartTele"):Destroy()
+		if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health <= 0 or not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            if game.Players.LocalPlayer.Character:FindFirstChild("PartTele") then
+                game.Players.LocalPlayer.Character:FindFirstChild("PartTele"):Destroy()
             end
         end
-        if lp.Character:FindFirstChild("PartTele") then
-            if (lp.Character.HumanoidRootPart.Position - lp.Character:FindFirstChild("PartTele").Position).Magnitude >= 100 then
-                lp.Character:FindFirstChild("PartTele"):Destroy()
+        if game.Players.LocalPlayer.Character:FindFirstChild("PartTele") then
+            if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character:FindFirstChild("PartTele").Position).Magnitude >= 100 then
+                game.Players.LocalPlayer.Character:FindFirstChild("PartTele"):Destroy()
             end
         end
 		_G.NoClip = false
