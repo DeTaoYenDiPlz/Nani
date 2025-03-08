@@ -1116,8 +1116,12 @@ spawn(function()
                             end
                         end
                     else
-                        StartMagnet = false
-                        Tween(CFrameMon)
+                        if game:GetService("ReplicatedStorage"):FindFirstChild(NameMob) then
+                            Tween(game:GetService("ReplicatedStorage"):FindFirstChild(NameMob).HumanoidRootPart.CFrame * PosFarm)
+                        else
+                            StartMagnet = false
+                            Tween(CFrameMon)
+                        end
                     end
                 end
             --end)
