@@ -115,11 +115,6 @@ spawn(function()
                     NoClip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
                     NoClip.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
                 end
-                if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid") and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
-                    local MoveDirection = game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid").MoveDirection
-                    MoveDirection = Vector3.new(MoveDirection.X, 0, MoveDirection.Z)
-                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyVelocity").Velocity = MoveDirection * 60
-                end
                 for _, v in pairs(game:GetService("Players").LocalPlayer.Character:GetDescendants()) do
                     if v:IsA("BasePart") then
                         v.CanCollide = false
@@ -259,7 +254,16 @@ end
 
 function StopTween(Pos)
 	if not Pos then
-		Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
+		if lp.Character:FindFirstChild("Humanoid").Health <= 0 or not lp.Character:FindFirstChild("HumanoidRootPart") then
+            if lp.Character:FindFirstChild("PartTele") then
+                lp.Character:FindFirstChild("PartTele"):Destroy()
+            end
+        end
+        if lp.Character:FindFirstChild("PartTele") then
+            if (lp.Character.HumanoidRootPart.Position - lp.Character:FindFirstChild("PartTele").Position).Magnitude >= 100 then
+                lp.Character:FindFirstChild("PartTele"):Destroy()
+            end
+        end
 		_G.NoClip = false
 	end
 end
