@@ -252,7 +252,7 @@ function Tween(Pos)
 end
 
 spawn(function()
-    while taks.wait()
+    while taks.wait() do
 		if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health <= 0 or not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
             if game.Players.LocalPlayer.Character:FindFirstChild("PartTele") then
                 game.Players.LocalPlayer.Character:FindFirstChild("PartTele"):Destroy()
