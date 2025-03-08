@@ -221,15 +221,8 @@ function Tween(Pos)
         end
         game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart", 9)
         game.Players.LocalPlayer.Character:WaitForChild("Head", 9)
-        if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Hold") then
-            local Hold = Instance.new("BodyVelocity", game.Players.LocalPlayer.Character.HumanoidRootPart)
-            Hold.Name = "Hold"
-            Hold.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-        else
-            game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Hold"):Destroy()
-        end
         if not game.Players.LocalPlayer.Character:FindFirstChild("PartTele") then
-            local PartTele = Instance.new("Part", game.Players.LocalPlayer.Character) -- Create part
+            local PartTele = Instance.new("Part", game.Players.LocalPlayer.Character)
             PartTele.Size = Vector3.new(10,1,10)
             PartTele.Name = "PartTele"
             PartTele.Anchored = true
@@ -238,9 +231,8 @@ function Tween(Pos)
             PartTele.CFrame = WaitHRP(game.Players.LocalPlayer).CFrame 
             PartTele:GetPropertyChangedSignal("CFrame"):Connect(function()
                 task.wait()
-                local Hrp = WaitHRP(game.Players.LocalPlayer)
-                if Hrp then
-                    Hrp.CFrame = PartTele.CFrame
+                if WaitHRP(game.Players.LocalPlayer) then
+                    WaitHRP(game.Players.LocalPlayer).CFrame = PartTele.CFrame
                 end
             end)
         end
@@ -267,11 +259,7 @@ end)
 
 function StopTween(Pos)
 	if not Pos then
-	    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = Pos
-	    TweenNe = game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.PartTele, TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),{CFrame = Pos})
-	    TweenNe:Play()
 	    Tween(game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame)
-	    Tween:Cancel()
 	end
 end
 
