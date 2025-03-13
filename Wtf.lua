@@ -479,7 +479,7 @@ spawn(function()
 						if v.Humanoid.Health > 0 then
 							repeat task.wait()
 							    _G.AutoObs = true
-								EquipWeapon(_25msShared.SelectWeapon)
+								EquipWeapon(_G.SelectWeapon)
 								NameTarget = v.Name
 								TP(v.HumanoidRootPart.CFrame * CFrame.new(0, 3, 3))
 								v.HumanoidRootPart.CanCollide = false
@@ -695,9 +695,9 @@ Other:Button({
    Callback = function()
        if _G.SelectSea == "First Sea" then
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelMain")
-        if _G.SelectSea == "Second Sea" then
+        elseif _G.SelectSea == "Second Sea" then
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
-        if _G.SelectSea == "Third Sea" then
+        elseif _G.SelectSea == "Third Sea" then
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
         end
    end
