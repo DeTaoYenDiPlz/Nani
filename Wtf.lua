@@ -85,7 +85,7 @@ local WindUI = loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindU
 WindUI:SetNotificationLower(true)
 local Window = WindUI:CreateWindow({
     Title = "Drazure Hub",
-    Icon = "ghost", -- 133347527177099
+    Icon = "rbxassetid://98348435879049", -- 98348435879049
     Author = "Blox Fruits - Free Script",
     Folder = "Drazure Hub",
     Size = UDim2.fromOffset(580, 350),
@@ -97,7 +97,7 @@ local Window = WindUI:CreateWindow({
 
 Window:EditOpenButton({
     Title = "Open",
-    Icon = "ghost", -- 133347527177099
+    Icon = "rbxassetid://98348435879049", -- 98348435879049
     CornerRadius = UDim.new(0, 10),
     StrokeThickness = 1.5,
     Color = ColorSequence.new(
@@ -136,7 +136,7 @@ local Dough_King = Window:Tab({
 })
 
 local Darkbread = Window:Tab({
-    Title = "Darkbread",
+    Title = "Darkbeard",
     Icon = "gem"
 })
 
@@ -146,6 +146,44 @@ local Sword = Window:Tab({
 })
 
 Window:SelectTab(1)
+
+--= [ Info ] =--
+
+Info:Section({ 
+    Title = "~ Discord Info ~",
+    TextXAlignment = "Center"
+})
+
+Info:Paragraph({
+    Title = "Drazure Hub Discord",
+    Desc = "• Join the discord server to get the latest informed.",
+    Image = "rbxassetid://98348435879049",
+    ImageSize = 50,
+    Buttons = {
+        {
+            Title = "Copy discord link",
+            Callback = function()
+                setclipboard("https://discord.gg/5GtPTWR42n")
+                WindUI:Notify({
+                    Title = "Drazure Hub",
+                    Content = "Copy discord server link successfully!",
+                    Icon = "rbxassetid://98348435879049",
+                    Duration = 3
+                })
+            end
+        }
+    }
+})
+
+Info:Section({ 
+    Title = "~ Changelogs ~",
+    TextXAlignment = "Center"
+})
+
+Info:Paragraph({
+    Title = "13/03/2025",
+    Desc = "  Add Hop Server Full Moon\n  Add Hop Server Mirage Island\n  Add Hop Server Rip Indra\n  Add Hop Server Dough King\n  Add Hop Server Darkbeard\n  Add Hop Server Legendary Swords"
+})
 
 --= [ Full Moon ] =--
 
@@ -190,34 +228,34 @@ function CheckMoonTexture()
 	end
 	return default
 end
+
 function ClockTime()
 	return math.floor(game.Lighting.ClockTime)
 end
 
 function CheckMoon()
-	local L_282_ = game.Lighting
-	local L_283_ = L_282_.ClockTime
-	if L_283_ >= 18 or L_283_ < 5 then
+	local Time = game.Lighting.ClockTime
+	if Time >= 18 or Time < 5 then
 		GameTime = "Night"
 	else
 		GameTime = "Day"
 	end
-	if CheckMoonTexture() == "Full Moon" and L_283_ <= 5 then
-		return tostring(ClockTime() .. "h : ") .. "( Will End Moon In " .. math.floor(5 - L_283_) .. " Minutes )"
-	elseif CheckMoonTexture() == "Full Moon" and (L_283_ > 5 and L_283_ < 12) then
+	if CheckMoonTexture() == "Full Moon" and Time <= 5 then
+		return tostring(ClockTime() .. "h : ") .. "( Will End Moon In " .. math.floor(5 - Time) .. " Minutes )"
+	elseif CheckMoonTexture() == "Full Moon" and (Time > 5 and Time < 12) then
 		return tostring(ClockTime() .. "h : ") .. "( Fake Moon )"
-	elseif CheckMoonTexture() == "Full Moon" and (L_283_ > 12 and L_283_ < 18) then
-		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 - L_283_) .. " Minutes )"
-	elseif CheckMoonTexture() == "Full Moon" and (L_283_ > 18 and L_283_ <= 24) then
-		return tostring(ClockTime() .. "h : ") .. "( Will End Moon In " .. math.floor(24 + 6 - L_283_) .. " Minutes )"
+	elseif CheckMoonTexture() == "Full Moon" and (Time > 12 and Time < 18) then
+		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 - Time) .. " Minutes )"
+	elseif CheckMoonTexture() == "Full Moon" and (Time > 18 and Time <= 24) then
+		return tostring(ClockTime() .. "h : ") .. "( Will End Moon In " .. math.floor(24 + 6 - Time) .. " Minutes )"
 	end
-	if CheckMoonTexture() == "Next Night" and L_283_ < 12 then
-		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 - L_283_) .. " Minutes )"
-	elseif CheckMoonTexture() == "Next Night" and L_283_ > 12 then
-		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 + 12 - L_283_) .. " Minutes )"
+	if CheckMoonTexture() == "Next Night" and Time < 12 then
+		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 - Time) .. " Minutes )"
+	elseif CheckMoonTexture() == "Next Night" and Time > 12 then
+		return tostring(ClockTime() .. "h : ") .. "( Will Full Moon In " .. math.floor(18 + 12 - Time) .. " Minutes )"
 	end
 	if CheckMoonTexture() == "No Full Moon" then
-		return tostring(ClockTime() .. "h : ") .. "No Full Moon"
+		return tostring(ClockTime() .. "h")
 	end
 end
 
@@ -228,7 +266,7 @@ spawn(function()
 end)
 
 getgenv().FullMoon = function()
-    local url = "https://hostserver.porry.store/bloxfruit/bot/JobId/fullmoon"
+    local url = "http://thor.pylex.software:9425/JobId/fullmoon"
     local response = game:GetService("HttpService"):JSONDecode(game:HttpGet(url))
     if response and response.JobId and #response.JobId > 0 then
         for jobId, _ in pairs(response.JobId[1]) do
@@ -236,7 +274,12 @@ getgenv().FullMoon = function()
             return
         end
     else
-        warn("Không tìm thấy server phù hợp!")
+        WindUI:Notify({
+            Title = "Drazure Hub",
+            Content = "Server not found or api is down!",
+            Icon = "rbxassetid://98348435879049",
+            Duration = 3
+        })
     end
 end
 
@@ -258,9 +301,75 @@ Full_Moon:Toggle({
 })
 
 spawn(function()
-    while wait(0.8) do
+    while wait(1) do
         if _G.JoinFullMoon then
             FullMoon()
         end
     end
 end)
+
+Full_Moon:Section({ 
+    Title = "~ Trials ~",
+    TextXAlignment = "Center"
+})
+
+Full_Moon:Toggle({
+    Title = "Auto Kill Player When Completing Trials",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.JoinFullMoon = V
+    end
+})
+
+--= [ Mirage Island ] =--
+
+Mirage_Island:Section({ 
+    Title = "~ Full Moon Server ~",
+    TextXAlignment = "Center"
+})
+
+local Mirage = Mirage_Island:Paragraph({
+    Title = "Mirage Island Status - Third Sea",
+    Desc = "N/A"
+})
+
+function CheckMirage()
+    if game.Workspace._WorldOrigin.Locations:FindFirstChild('Mirage Island') then
+        return "Mirage Island: 🟢"
+    else
+        return "Mirage Island: 🔴"
+    end
+end
+
+spawn(function()
+    while task.wait() do
+        Mirage:SetDesc(CheckMirage())
+    end
+end)
+
+getgenv().MirageIsland = function()
+    local url = "http://thor.pylex.software:9425/JobId/mirage"
+    local response = game:GetService("HttpService"):JSONDecode(game:HttpGet(url))
+    if response and response.JobId and #response.JobId > 0 then
+        for jobId, _ in pairs(response.JobId[1]) do
+            game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, jobId, game.Players.LocalPlayer)
+            return
+        end
+    else
+        WindUI:Notify({
+            Title = "Drazure Hub",
+            Content = "Server not found or api is down!",
+            Icon = "rbxassetid://98348435879049",
+            Duration = 3
+        })
+    end
+end
+
+Mirage_Island:Button({
+   Title = "Join Server Mirage Island",
+    -- Desc = "",
+   Callback = function()
+        MirageIsland()
+   end
+})
