@@ -420,13 +420,13 @@ Full_Moon:Section({
     TextXAlignment = "Center"
 })
 
-Other:Dropdown({
+Full_Moon:Dropdown({
     Title = "Select Area",
     -- Desc = "",
     Multi = false,
     Value = "",
     AllowNone = true,
-    Values = {"Melee","Sword","Blox Fruit"},
+    Values = {"Temple of Time","Pull Lever","Race Door","Ancient Clock"},
     Callback = function(V)
         _G.SelectArea = V
     end
@@ -598,7 +598,7 @@ Mirage_Island:Button({
    end
 })
 
-MirageIsland:Toggle({
+Mirage_Island:Toggle({
     Title = "Auto Join Server With Mirgae Island",
     -- Desc = "",
     Value = false,
