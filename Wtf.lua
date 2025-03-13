@@ -161,7 +161,7 @@ end
 spawn(function()
 	while task.wait() do
 		pcall(function()
-			if _G.KillPlayerTrials then
+			if _G.KillPlayerTrials or _G.TeleportArea or _G.TeleportMirage then
 				if not game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
 					local Bv = Instance.new("BodyVelocity")
 					Bv.Name = "BodyClip"
@@ -438,8 +438,11 @@ Full_Moon:Toggle({
     Value = false,
     Callback = function(V)
         _G.TeleportArea= V
+        StopTween(_G.TeleportArea)
     end
 })
+
+local Map = CFrame.new(28734.3945, 14888.2324, - 109.071777, - 0.650207579, 4.1780531e-08, - 0.759756625, 1.97876595e-08, 1, 3.80575109e-08, 0.759756625, 9.71147784e-09, - 0.650207579)
 
 spawn(function()
     while wait() do
@@ -452,7 +455,7 @@ spawn(function()
 	                	if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
 		                	TweenTemple()
 	                	end
-                	until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000;
+                	until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000
                 	Tween(game:GetService("Workspace").Map["Temple of Time"].Lever.Part.CFrame)
                 	for i, v in pairs(game:GetService("Workspace").Map["Temple of Time"].Lever:GetDescendants()) do
                 		if v.Name == "ProximityPrompt" then
@@ -472,8 +475,6 @@ spawn(function()
         end)
     end
 end)
-
-local Map = CFrame.new(28734.3945, 14888.2324, - 109.071777, - 0.650207579, 4.1780531e-08, - 0.759756625, 1.97876595e-08, 1, 3.80575109e-08, 0.759756625, 9.71147784e-09, - 0.650207579)
 
 function TweenTemple()
 	game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(28282.5703125, 14896.8505859375, 105.1042709350586))
@@ -615,6 +616,30 @@ spawn(function()
     end
 end)
 
+Mirage_Island:Toggle({
+    Title = "Teleport To Mirgae Island",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.TeleportMirage = V
+        StopTween(_G.TeleportMirage)
+    end
+})
+
+spawn(function()
+	while wait() do
+		pcall(function()
+			if _G.TeleportMirage then
+				for i, v in pairs(game:GetService("Workspace")._WorldOrigin.Locations:GetChildren()) do
+					if v.Name == "Mirage Island" then
+						Tween(v.CFrame * CFrame.new(0, 333, 0))
+					end
+				end
+			end
+		end)
+	end
+end)
+
 --= [ Other ] =--
 
 Other:Section({ 
@@ -626,7 +651,7 @@ Other:Dropdown({
     Title = "Select Weapon",
     -- Desc = "",
     Multi = false,
-    Value = "",
+    Value = "Melee",
     AllowNone = false,
     Values = {"Melee","Sword","Blox Fruit"},
     Callback = function(V)
@@ -645,7 +670,7 @@ end
 Other:Toggle({
     Title = "Fast Attack",
     -- Desc = "",
-    Value = false,
+    Value = true,
     Callback = function(V)
         _G.FastAttack = V
     end
