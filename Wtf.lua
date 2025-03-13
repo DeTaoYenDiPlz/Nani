@@ -248,8 +248,8 @@ local Sword = Window:Tab({
 Window:Divider()
 
 local Other = Window:Tab({
-    Title = "Settings",
-    Icon = "setting"
+    Title = "Other",
+    Icon = "settings"
 })
 
 Window:SelectTab(1)
@@ -420,13 +420,58 @@ Full_Moon:Section({
     TextXAlignment = "Center"
 })
 
-Full_Moon:Button({
-   Title = "Pull Lever",
+Other:Dropdown({
+    Title = "Select Area",
     -- Desc = "",
-   Callback = function()
-        PullLever()
-   end
+    Multi = false,
+    Value = "",
+    AllowNone = true,
+    Values = {"Melee","Sword","Blox Fruit"},
+    Callback = function(V)
+        _G.SelectArea = V
+    end
 })
+
+Full_Moon:Toggle({
+    Title = "Teleport To Area",
+    -- Desc = "",
+    Value = false,
+    Callback = function(V)
+        _G.TeleportArea= V
+    end
+})
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.TeleportArea then
+                if _G.SelectArea == "Temple of Time" then
+                    TweenTemple()
+                elseif _G.SelectArea == "Pull Lever" then
+                    repeat wait()
+	                	if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
+		                	TweenTemple()
+	                	end
+                	until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000;
+                	Tween(game:GetService("Workspace").Map["Temple of Time"].Lever.Part.CFrame)
+                	for i, v in pairs(game:GetService("Workspace").Map["Temple of Time"].Lever:GetDescendants()) do
+                		if v.Name == "ProximityPrompt" then
+                			fireproximityprompt(v)
+                		end
+                	end
+                elseif _G.SelectArea == "Race Door" then
+                    TweentoCurrentRaceDoor()
+                elseif _G.SelectArea == "Ancient Clock" then
+                    for i, v in next, workspace:GetDescendants() do
+		                if v.Name == "Prompt" then
+			                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+		                end
+	                end
+                end
+            end
+        end)
+    end
+end)
 
 local Map = CFrame.new(28734.3945, 14888.2324, - 109.071777, - 0.650207579, 4.1780531e-08, - 0.759756625, 1.97876595e-08, 1, 3.80575109e-08, 0.759756625, 9.71147784e-09, - 0.650207579)
 
@@ -434,17 +479,25 @@ function TweenTemple()
 	game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(28282.5703125, 14896.8505859375, 105.1042709350586))
 end
 
-function PullLever()
-	repeat wait()
-		if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
-			TweenTemple()
-		end
-	until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000;
-	TP(game:GetService("Workspace").Map["Temple of Time"].Lever.Part.CFrame)
-	for i, v in pairs(game:GetService("Workspace").Map["Temple of Time"].Lever:GetDescendants()) do
-		if v.Name == "ProximityPrompt" then
-			fireproximityprompt(v)
-		end
+local A = {}
+for i, v in pairs(game.Workspace:GetDescendants()) do
+	if string.find(v.Name, 'Corridor') then
+		A[v.Name] = v.Door.Door.RightDoor.Union.CFrame
+	end
+end
+
+function TweentoCurrentRaceDoor()
+	a = A[game.Players.LocalPlayer.Data.Race.Value .. 'Corridor']
+	if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
+		repeat
+			wait()
+			if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
+				TweenTemple()
+			end
+		until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000
+		Tween(a)
+	elseif (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000 then
+		Tween(a)
 	end
 end
 
@@ -481,7 +534,7 @@ spawn(function()
 							    _G.AutoObs = true
 								EquipWeapon(_G.SelectWeapon)
 								NameTarget = v.Name
-								TP(v.HumanoidRootPart.CFrame * CFrame.new(0, 3, 3))
+								Tween(v.HumanoidRootPart.CFrame * CFrame.new(0, 3, 3))
 								v.HumanoidRootPart.CanCollide = false
 								v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 							until not _G.KillPlayerTrials or not v.Parent or v.Humanoid.Health <= 0
