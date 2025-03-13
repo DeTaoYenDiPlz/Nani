@@ -443,6 +443,8 @@ Full_Moon:Toggle({
 })
 
 local Map = CFrame.new(28734.3945, 14888.2324, - 109.071777, - 0.650207579, 4.1780531e-08, - 0.759756625, 1.97876595e-08, 1, 3.80575109e-08, 0.759756625, 9.71147784e-09, - 0.650207579)
+local Doorsau = CFrame.new(28576.4688,14935.9512,75.469101,-1,-4.22219593e-08,1.13133396e-08,0,-0.258819044,-0.965925813,4.37113883e-08,-0.965925813,0.258819044)
+local Door2 = 0.2
 
 spawn(function()
     while wait() do
@@ -451,17 +453,13 @@ spawn(function()
                 if _G.SelectArea == "Temple of Time" then
                     TweenTemple()
                 elseif _G.SelectArea == "Pull Lever" then
-                    repeat wait()
-	                	if (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 2000 then
-		                	TweenTemple()
-	                	end
-                	until (Map.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 2000
-                	Tween(game:GetService("Workspace").Map["Temple of Time"].Lever.Part.CFrame)
-                	for i, v in pairs(game:GetService("Workspace").Map["Temple of Time"].Lever:GetDescendants()) do
-                		if v.Name == "ProximityPrompt" then
-                			fireproximityprompt(v)
-                		end
-                	end
+                	if game:GetService("Workspace").Map["Temple of Time"].Lever.Lever.CFrame.Z > Doorsau.Z + Door2 or game:GetService("Workspace").Map["Temple of Time"].Lever.Lever.CFrame.Z < Doorsau.Z - Door2 then 
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - game:GetService("Workspace").Map["Temple of Time"].Lever.Part.Position).Magnitude > 10 then
+                            Tween(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, game:GetService("Workspace").Map["Temple of Time"].Lever.Part.Position, game:GetService("Workspace").Map["Temple of Time"].Lever.Part.CFrame)
+                        else
+                            fireproximityprompt(workspace.Map["Temple of Time"].Lever.Prompt.ProximityPrompt, 1)
+                        end
+                    end
                 elseif _G.SelectArea == "Race Door" then
                     TweentoCurrentRaceDoor()
                 elseif _G.SelectArea == "Ancient Clock" then
@@ -647,6 +645,7 @@ Other:Section({
     TextXAlignment = "Center"
 })
 
+_G.SelectWeapon = "Melee"
 Other:Dropdown({
     Title = "Select Weapon",
     -- Desc = "",
