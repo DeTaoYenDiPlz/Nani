@@ -354,41 +354,41 @@ _G.Settings = {
 };
 (getgenv()).Load = function()
 	if readfile and writefile and isfile and isfolder then
-		if not isfolder("Relz Hub New") then
-			makefolder("Relz Hub New");
-		end;
-		if not isfolder("Relz Hub New/Blox Fruits/") then
-			makefolder("Relz Hub New/Blox Fruits/");
-		end;
-		if not isfile(("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json")) then
-			writefile("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(_G.Settings));
+		if not isfolder("Arise Eldia") then
+			makefolder("Arise Eldia")
+		end
+		if not isfolder("Arise Eldia/Blox Fruits/") then
+			makefolder("Arise Eldia/Blox Fruits/")
+		end
+		if not isfile(("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json")) then
+			writefile("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(_G.Settings))
 		else
-			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"));
+			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"))
 			for i, v in pairs(Decode) do
-				_G.Settings[i] = v;
-			end;
-		end;
-		print("Loaded!");
+				_G.Settings[i] = v
+			end
+		end
+		print("Loaded!")
 	else
-		return warn("Status : Undetected Executor");
-	end;
-end;
+		return warn("Status : Undetected Executor")
+	end
+end
 (getgenv()).SaveSetting = function()
 	if readfile and writefile and isfile and isfolder then
-		if not isfile(("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json")) then
-			(getgenv()).Load();
+		if not isfile(("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json")) then
+			(getgenv()).Load()
 		else
-			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"));
-			local Array = {};
+			local Decode = (game:GetService("HttpService")):JSONDecode(readfile("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json"))
+			local Array = {}
 			for i, v in pairs(_G.Settings) do
-				Array[i] = v;
-			end;
-			writefile("Relz Hub New/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(Array));
-		end;
+				Array[i] = v
+			end
+			writefile("Arise Eldia/Blox Fruits/" .. game.Players.LocalPlayer.Name .. ".json", (game:GetService("HttpService")):JSONEncode(Array))
+		end
 	else
-		return warn("Status : Undetected Executor");
-	end;
-end;
+		return warn("Status : Undetected Executor")
+	end
+end
 (getgenv()).Load();
 if game.PlaceId == 2753915549 then
 	World1 = true;
