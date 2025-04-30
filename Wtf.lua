@@ -1,4 +1,3 @@
-local Keysystem = (loadstring(game:HttpGet("https://relzhub.farrghii.com/config/keysystem.lua")))()
 local WindUI = (loadstring(game:HttpGet("https://tree-hub.vercel.app/api/UI/WindUI")))()
 local Window = WindUI:CreateWindow({
 	Title = "Arise Eldia [ Free Script ]",
@@ -9,16 +8,7 @@ local Window = WindUI:CreateWindow({
 	Transparent = true,
 	Theme = "Dark",
 	SideBarWidth = 150,
-	HasOutline = true,
-	KeySystem = {
-		Key = {
-			"discord.gg/umaru",
-			Keysystem:GetUserKey()
-		},
-		Note = "Get the key first to access the script.",
-		URL = tostring(Keysystem:GetKeyUrl()),
-		SaveKey = false
-	}
+	HasOutline = true
 })
 Window:EditOpenButton({
 	Title = "Open",
